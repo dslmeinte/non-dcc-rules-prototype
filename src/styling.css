@@ -1,0 +1,54 @@
+body {
+    font-family: "Fira Sans", "Helvetica Neue", sans-serif;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+main {
+    align-content: center;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin: 2em;
+}
+
+.tt {
+    font-family: "Meno", "Fira Code", monospace;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+td, th {
+    border: 1px solid #999;
+    padding: 0.5rem;
+    text-align: left;
+}
+
+th {
+    background-color: lightblue;
+}
+
+td.step-num {
+    text-align: right;
+    background-color: lightgrey;
+}
+
+.error, .fail {
+    background-color: lightcoral;
+}
+
+td.center {
+    text-align: center;
+}
+
+.pass {
+    background-color: lightgreen;
+}
+
+button {
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid darkgrey;
+}
+

@@ -1,0 +1,663 @@
+[
+    {
+        "Identifier": "CR-NL-0001",
+        "Type": "Acceptance",
+        "Country": "NL",
+        "Version": "1.0.0",
+        "SchemaVersion": "1.3.0",
+        "Engine": "CERTLOGIC",
+        "EngineVersion": "0.7.5",
+        "CertificateType": "General",
+        "Description": [
+            {
+                "lang": "nl",
+                "desc": "DCC is correct, maar voor reizen naar Nederland vanuit een land met code oranje is altijd een geldig negatief test resultaat nodig. Vraag om een DCC met een test resultaat.\n\nBij oranje VOC is\n- Een PCR/NAAT test van maximaal 24 uur oud\nof\n- Een PCR/NAAT test van maximaal 48 uur oud & een Antigeen test van maximaal 24 uur oud"
+            },
+            {
+                "lang": "en",
+                "desc": "DCC is valid however travelling to The Netherlands from a country with orange colorcode requires a valid negative test result. Ask for a DCC that contains a valid test result.\n\nIn orange VOC, one of the following is required\n- A PCR/NAAT test of no more than 24 hours old\nof\n- A PCR/NAAT test of no more than 48 hours old AND an antigen test of no more than 24 hours old"
+            }
+        ],
+        "ValidFrom": "2021-05-05T00:00:00Z",
+        "ValidTo": "2030-06-01T00:00:00Z",
+        "AffectedFields": [
+            "t.0",
+            "from.color",
+            "from.is_EU"
+        ],
+        "Logic": {
+            "if": [
+                {
+                    "var": "payload.t.0"
+                },
+                true,
+                {
+                    "if": [
+                        {
+                            "===": [
+                                {
+                                    "var": "payload.from.color"
+                                },
+                                "orange_very_high_risk"
+                            ]
+                        },
+                        {
+                            "===": [
+                                {
+                                    "var": "payload.from.is_EU"
+                                },
+                                false
+                            ]
+                        },
+                        true
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "Identifier": "CR-NL-0002",
+        "Type": "Acceptance",
+        "Country": "NL",
+        "Version": "1.0.0",
+        "SchemaVersion": "1.3.0",
+        "Engine": "CERTLOGIC",
+        "EngineVersion": "0.7.5",
+        "CertificateType": "General",
+        "Description": [
+            {
+                "lang": "nl",
+                "desc": "DCC is correct, maar voor reizen naar Nederland vanuit een land met code oranje is altijd een geldig negatief test resultaat nodig. Vraag om een DCC met een test resultaat.\n\nBij oranje VOC is\n- Een PCR/NAAT test van maximaal 24 uur oud\nof\n- Een PCR/NAAT test van maximaal 48 uur oud & een Antigeen test van maximaal 24 uur oud"
+            },
+            {
+                "lang": "en",
+                "desc": "DCC is valid however travelling to The Netherlands from a country with orange colorcode requires a valid negative test result. Ask for a DCC that contains a valid test result.\n\nIn orange VOC, one of the following is required\n- A PCR/NAAT test of no more than 24 hours old\nof\n- A PCR/NAAT test of no more than 48 hours old AND an antigen test of no more than 24 hours old"
+            }
+        ],
+        "ValidFrom": "2021-05-05T00:00:00Z",
+        "ValidTo": "2030-06-01T00:00:00Z",
+        "AffectedFields": [
+            "t.0",
+            "from.color",
+            "from.is_EU"
+        ],
+        "Logic": {
+            "if": [
+                {
+                    "var": "payload.t.0"
+                },
+                true,
+                {
+                    "if": [
+                        {
+                            "in": [
+                                {
+                                    "var": "payload.from.color"
+                                },
+                                [
+                                    "orange_very_high_risk"
+                                ]
+                            ]
+                        },
+                        {
+                            "===": [
+                                {
+                                    "var": "payload.from.is_EU"
+                                },
+                                true
+                            ]
+                        },
+                        true
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "Identifier": "CR-NL-0009",
+        "Type": "Acceptance",
+        "Country": "NL",
+        "Version": "1.0.0",
+        "SchemaVersion": "1.3.0",
+        "Engine": "CERTLOGIC",
+        "EngineVersion": "0.7.5",
+        "CertificateType": "General",
+        "Description": [
+            {
+                "lang": "nl",
+                "desc": "DCC is correct, maar voor reizen naar Nederland vanuit een land met code oranje is altijd een geldig negatief test resultaat nodig."
+            },
+            {
+                "lang": "en",
+                "desc": "DCC is valid however travelling to The Netherlands from a country with orange colorcode requires a valid negative test result."
+            }
+        ],
+        "ValidFrom": "2021-05-05T00:00:00Z",
+        "ValidTo": "2030-06-01T00:00:00Z",
+        "AffectedFields": [
+            "t.0",
+            "from.color",
+            "from.is_EU"
+        ],
+        "Logic": {
+            "if": [
+                {
+                    "var": "payload.t.0"
+                },
+                true,
+                {
+                    "if": [
+                        {
+                            "in": [
+                                {
+                                    "var": "payload.from.color"
+                                },
+                                [
+                                    "orange_high_incidence"
+                                ]
+                            ]
+                        },
+                        {
+                            "===": [
+                                {
+                                    "var": "payload.from.is_EU"
+                                },
+                                true
+                            ]
+                        },
+                        true
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "Identifier": "CR-NL-0003",
+        "Type": "Acceptance",
+        "Country": "NL",
+        "Version": "1.0.0",
+        "SchemaVersion": "1.3.0",
+        "Engine": "CERTLOGIC",
+        "EngineVersion": "0.7.5",
+        "CertificateType": "General",
+        "Description": [
+            {
+                "lang": "nl",
+                "desc": "Een tweede antigeen test van maximaal 24 uur oud is nodig bij oranje VOC\n\nBij oranje VOC is\n- Een PCR/NAAT test van maximaal 24 uur oud\nof\n- Een PCR/NAAT test van maximaal 48 uur oud & een Antigeen test van maximaal 24 uur oud"
+            },
+            {
+                "lang": "en",
+                "desc": "A second antigen test of maximum 24 hours old is required in orange VOC\n\nIn orange VOC, one of the following is required\n- A PCR/NAAT test of no more than 24 hours old\nof\n- A PCR/NAAT test of no more than 48 hours old AND an antigen test of no more than 24 hours old"
+            }
+        ],
+        "ValidFrom": "2021-05-05T00:00:00Z",
+        "ValidTo": "2030-06-01T00:00:00Z",
+        "AffectedFields": [
+            "t.0",
+            "t.0.tt",
+            "from.color",
+            "from.is_EU"
+        ],
+        "Logic": {
+            "if": [
+                {
+                    "var": "payload.t.0"
+                },
+                {
+                    "if": [
+                        {
+                            "===": [
+                                {
+                                    "var": "payload.from.color"
+                                },
+                                "orange_very_high_risk"
+                            ]
+                        },
+                        {
+                            "if": [
+                                {
+                                    "===": [
+                                        {
+                                            "var": "payload.t.0.tt"
+                                        },
+                                        "LP6464-4"
+                                    ]
+                                },
+                                {
+                                    "if": [
+                                        {
+                                            "not-before": [
+                                                {
+                                                    "plusTime": [
+                                                        {
+                                                            "var": "external.validationClock"
+                                                        },
+                                                        0,
+                                                        "day"
+                                                    ]
+                                                },
+                                                {
+                                                    "plusTime": [
+                                                        {
+                                                            "var": "payload.t.0.sc"
+                                                        },
+                                                        24,
+                                                        "hour"
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "after": [
+                                                {
+                                                    "plusTime": [
+                                                        {
+                                                            "var": "external.validationClock"
+                                                        },
+                                                        0,
+                                                        "day"
+                                                    ]
+                                                },
+                                                {
+                                                    "plusTime": [
+                                                        {
+                                                            "var": "payload.t.0.sc"
+                                                        },
+                                                        48,
+                                                        "hour"
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        true
+                                    ]
+                                },
+                                true
+                            ]
+                        },
+                        true
+                    ]
+                },
+                true
+            ]
+        }
+    },
+    {
+        "Identifier": "CR-NL-0004",
+        "Type": "Acceptance",
+        "Country": "NL",
+        "Version": "1.0.0",
+        "SchemaVersion": "1.3.0",
+        "Engine": "CERTLOGIC",
+        "EngineVersion": "0.7.5",
+        "CertificateType": "General",
+        "Description": [
+            {
+                "lang": "nl",
+                "desc": "Bij oranje VOC is\n- Een PCR/NAAT test van maximaal 24 uur oud\nof\n- Een PCR/NAAT test van maximaal 48 uur oud & een Antigeen test van maximaal 24 uur oud"
+            },
+            {
+                "lang": "en",
+                "desc": "In orange VOC, one of the following is required\n- A PCR/NAAT test of no more than 24 hours old\nof\n- A PCR/NAAT test of no more than 48 hours old AND an antigen test of no more than 24 hours old"
+            }
+        ],
+        "ValidFrom": "2021-05-05T00:00:00Z",
+        "ValidTo": "2030-06-01T00:00:00Z",
+        "AffectedFields": [
+            "t.0",
+            "t.0.tt",
+            "from.color",
+            "from.is_EU"
+        ],
+        "Logic": {
+            "if": [
+                {
+                    "var": "payload.t.0"
+                },
+                {
+                    "if": [
+                        {
+                            "===": [
+                                {
+                                    "var": "payload.from.color"
+                                },
+                                "orange_very_high_risk"
+                            ]
+                        },
+                        {
+                            "if": [
+                                {
+                                    "===": [
+                                        {
+                                            "var": "payload.t.0.tt"
+                                        },
+                                        "LP6464-4"
+                                    ]
+                                },
+                                {
+                                    "not-after": [
+                                        {
+                                            "plusTime": [
+                                                {
+                                                    "var": "external.validationClock"
+                                                },
+                                                0,
+                                                "day"
+                                            ]
+                                        },
+                                        {
+                                            "plusTime": [
+                                                {
+                                                    "var": "payload.t.0.sc"
+                                                },
+                                                48,
+                                                "hour"
+                                            ]
+                                        }
+                                    ]
+                                },
+                                true
+                            ]
+                        },
+                        true
+                    ]
+                },
+                true
+            ]
+        }
+    },
+    {
+        "Identifier": "CR-NL-0005",
+        "Type": "Acceptance",
+        "Country": "NL",
+        "Version": "1.0.0",
+        "SchemaVersion": "1.3.0",
+        "Engine": "CERTLOGIC",
+        "EngineVersion": "0.7.5",
+        "CertificateType": "General",
+        "Description": [
+            {
+                "lang": "nl",
+                "desc": "Bij oranje VOC is\n- Een PCR/NAAT test van maximaal 24 uur oud\nof\n- Een PCR/NAAT test van maximaal 48 uur oud & een Antigeen test van maximaal 24 uur oud"
+            },
+            {
+                "lang": "en",
+                "desc": "In orange VOC, one of the following is required\n- A PCR/NAAT test of no more than 24 hours old\nof\n- A PCR/NAAT test of no more than 48 hours old AND an antigen test of no more than 24 hours old"
+            }
+        ],
+        "ValidFrom": "2021-05-05T00:00:00Z",
+        "ValidTo": "2030-06-01T00:00:00Z",
+        "AffectedFields": [
+            "t.0",
+            "t.0.tt",
+            "from.color",
+            "from.is_EU"
+        ],
+        "Logic": {
+            "if": [
+                {
+                    "var": "payload.t.0"
+                },
+                {
+                    "if": [
+                        {
+                            "===": [
+                                {
+                                    "var": "payload.from.color"
+                                },
+                                "orange_very_high_risk"
+                            ]
+                        },
+                        {
+                            "if": [
+                                {
+                                    "===": [
+                                        {
+                                            "var": "payload.t.0.tt"
+                                        },
+                                        "LP217198-3"
+                                    ]
+                                },
+                                {
+                                    "not-before": [
+                                        {
+                                            "plusTime": [
+                                                {
+                                                    "var": "external.validationClock"
+                                                },
+                                                0,
+                                                "day"
+                                            ]
+                                        },
+                                        {
+                                            "plusTime": [
+                                                {
+                                                    "var": "payload.t.0.sc"
+                                                },
+                                                24,
+                                                "hour"
+                                            ]
+                                        }
+                                    ]
+                                },
+                                true
+                            ]
+                        },
+                        true
+                    ]
+                },
+                true
+            ]
+        }
+    },
+    {
+        "Identifier": "CR-NL-0006",
+        "Type": "Acceptance",
+        "Country": "NL",
+        "Version": "1.0.0",
+        "SchemaVersion": "1.3.0",
+        "Engine": "CERTLOGIC",
+        "EngineVersion": "0.7.5",
+        "CertificateType": "General",
+        "Description": [
+            {
+                "lang": "nl",
+                "desc": "Bij oranje VOC is\n- Een PCR/NAAT test van maximaal 24 uur oud\nof\n- Een PCR/NAAT test van maximaal 48 uur oud & een Antigeen test van maximaal 24 uur oud"
+            },
+            {
+                "lang": "en",
+                "desc": "In orange VOC, one of the following is required\n- A PCR/NAAT test of no more than 24 hours old\nof\n- A PCR/NAAT test of no more than 48 hours old AND an antigen test of no more than 24 hours old"
+            }
+        ],
+        "ValidFrom": "2021-05-05T00:00:00Z",
+        "ValidTo": "2030-06-01T00:00:00Z",
+        "AffectedFields": [
+            "t.0",
+            "t.0.tt",
+            "from.color",
+            "from.is_EU"
+        ],
+        "Logic": {
+            "if": [
+                {
+                    "var": "payload.t.0"
+                },
+                {
+                    "if": [
+                        {
+                            "===": [
+                                {
+                                    "var": "payload.from.color"
+                                },
+                                "orange_very_high_risk"
+                            ]
+                        },
+                        {
+                            "if": [
+                                {
+                                    "===": [
+                                        {
+                                            "var": "payload.t.0.tt"
+                                        },
+                                        "LP217198-3"
+                                    ]
+                                },
+                                {
+                                    "before": [
+                                        {
+                                            "plusTime": [
+                                                {
+                                                    "var": "external.validationClock"
+                                                },
+                                                0,
+                                                "day"
+                                            ]
+                                        },
+                                        {
+                                            "plusTime": [
+                                                {
+                                                    "var": "payload.t.0.sc"
+                                                },
+                                                24,
+                                                "hour"
+                                            ]
+                                        }
+                                    ]
+                                },
+                                true
+                            ]
+                        },
+                        true
+                    ]
+                },
+                true
+            ]
+        }
+    },
+    {
+        "Identifier": "CR-NL-0007",
+        "Type": "Acceptance",
+        "Country": "NL",
+        "Version": "1.0.0",
+        "SchemaVersion": "1.3.0",
+        "Engine": "CERTLOGIC",
+        "EngineVersion": "0.7.5",
+        "CertificateType": "General",
+        "Description": [
+            {
+                "lang": "nl",
+                "desc": "Bij oranje VOC is\n- Een PCR/NAAT test van maximaal 24 uur oud\nof\n- Een PCR/NAAT test van maximaal 48 uur oud & een Antigeen test van maximaal 24 uur oud"
+            },
+            {
+                "lang": "en",
+                "desc": "In orange VOC, one of the following is required\n- A PCR/NAAT test of no more than 24 hours old\nof\n- A PCR/NAAT test of no more than 48 hours old AND an antigen test of no more than 24 hours old"
+            }
+        ],
+        "ValidFrom": "2021-05-05T00:00:00Z",
+        "ValidTo": "2030-06-01T00:00:00Z",
+        "AffectedFields": [
+            "t.0",
+            "t.0.tt",
+            "from.color",
+            "from.is_EU"
+        ],
+        "Logic": {
+            "if": [
+                {
+                    "var": "payload.t.0"
+                },
+                {
+                    "if": [
+                        {
+                            "===": [
+                                {
+                                    "var": "payload.from.color"
+                                },
+                                "orange_very_high_risk"
+                            ]
+                        },
+                        {
+                            "if": [
+                                {
+                                    "in": [
+                                        {
+                                            "var": "payload.t.0.tt"
+                                        },
+                                        [
+                                            "LP217198-3",
+                                            "LP6464-4"
+                                        ]
+                                    ]
+                                },
+                                true,
+                                false
+                            ]
+                        },
+                        true
+                    ]
+                },
+                true
+            ]
+        }
+    },
+
+    {
+        "Identifier": "CR-NL-0010",
+        "Type": "Acceptance",
+        "Country": "NL",
+        "Version": "1.0.0",
+        "SchemaVersion": "1.3.0",
+        "Engine": "CERTLOGIC",
+        "EngineVersion": "0.7.5",
+        "CertificateType": "General",
+        "Description": [
+            {
+                "lang": "nl",
+                "desc": "DCC is correct, maar voor reizen naar Nederland vanuit een land buiten de EU/Schengen met code geel of oranje is een geldig negatief test resultaat nodig."
+            },
+            {
+                "lang": "en",
+                "desc": "DCC is valid however travelling to The Netherlands from a country outside the EU/Schengen with yellow or orange colorcode requires a valid negative test result."
+            }
+        ],
+        "ValidFrom": "2021-05-05T00:00:00Z",
+        "ValidTo": "2030-06-01T00:00:00Z",
+        "AffectedFields": [
+            "t.0",
+            "from.color",
+            "from.is_EU"
+        ],
+        "Logic": {
+            "if": [
+                {
+                    "var": "payload.t.0"
+                },
+                true,
+                {
+                    "if": [
+                        {
+                            "in": [
+                                {
+                                    "var": "payload.from.color"
+                                },
+                                [
+                                    "yellow",
+                                    "orange"
+                                ]
+                            ]
+                        },
+                        {
+                            "===": [
+                                {
+                                    "var": "payload.from.is_EU"
+                                },
+                                true
+                            ]
+                        },
+                        true
+                    ]
+                }
+            ]
+        }
+    }
+]

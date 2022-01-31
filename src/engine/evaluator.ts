@@ -36,7 +36,7 @@ export const applicableRuleLogic = (sortedRules: Rules, now: Date): RuleLogicMap
                 rule.versions.find((ruleVersion) => new Date(ruleVersion.validFrom) < now)
             ] as [ string, RuleVersion | undefined ])
             .filter(([_, version]) => version !== undefined)
-            .map(([id, version]) => [id, version!!.logic])
+            .map(([id, version]) => [id, version!.logic])
     )
 
 
@@ -48,7 +48,7 @@ export const dependenciesOf = (rootExpr: CertLogicExpression): string[] =>   // 
     )
 
 
-type ResultsMap = { [ruleId: string]: any }
+export type ResultsMap = { [ruleId: string]: any }
 export const replaceWithResults = (rootExpr: CertLogicExpression, resultsMap: ResultsMap): CertLogicExpression => {   // (exported for unit tests only)
     const replace_ = (expr: CertLogicExpression): CertLogicExpression => {
         if (typeof expr === "string" || isInt(expr) || typeof expr === "boolean") {

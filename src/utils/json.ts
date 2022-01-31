@@ -1,6 +1,12 @@
-import {PathLike, writeFileSync} from "fs"
+export const pretty = (data: any): string =>
+    JSON.stringify(data, null, 2)
 
-export const writeJson = (path: PathLike, data: any) => {
-    writeFileSync(path, JSON.stringify(data, null, 2))
+
+export const tryParse = (text: string) => {
+    try {
+        return JSON.parse(text)
+    } catch (e) {
+        return e
+    }
 }
 

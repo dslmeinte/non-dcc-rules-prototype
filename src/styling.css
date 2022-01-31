@@ -11,9 +11,37 @@ main {
     margin: 2em;
 }
 
-.tt {
-    font-family: "Meno", "Fira Code", monospace;
+.wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 1em;
+    row-gap: 2em;
 }
+
+h1 {
+    font-size: 42px;
+    text-align: center;
+}
+
+pre {
+    font-family: Menlo, Monaco, "Lucida Console", "Fira Code", "Courier New", monospace, serif;
+    white-space: pre-wrap;
+}
+
+textarea {
+    padding: 0.5rem;
+    width: 60em;
+    height: 20em;
+    display: block;
+    vertical-align: top;
+    resize: none;
+    overflow: scroll;
+}
+
+span.label {
+    font-weight: bolder;
+}
+
 
 table {
     border-collapse: collapse;
@@ -21,7 +49,7 @@ table {
 
 td, th {
     border: 1px solid #999;
-    padding: 0.5rem;
+    padding: 3px;
     text-align: left;
 }
 
@@ -29,26 +57,7 @@ th {
     background-color: lightblue;
 }
 
-td.step-num {
-    text-align: right;
-    background-color: lightgrey;
-}
-
-.error, .fail {
-    background-color: lightcoral;
-}
-
-td.center {
-    text-align: center;
-}
-
-.pass {
-    background-color: lightgreen;
-}
-
-button {
-    font-size: 16px;
-    border-radius: 5px;
-    border: 1px solid darkgrey;
+.tt {
+    font-family: "Meno", "Fira Code", monospace;
 }
 

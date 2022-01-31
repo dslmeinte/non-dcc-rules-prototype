@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://id.uvci.eu/external-parameters.schema.json",
+  "title": "EU DCC",
+  "description": "Schema for the external parameters.",
+  "type": "object",
+  "properties": {
+  },
+  "$defs": {
+    "listOfValueSetIDs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

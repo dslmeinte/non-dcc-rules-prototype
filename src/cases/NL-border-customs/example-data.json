@@ -1,0 +1,11 @@
+{
+  "payload": {
+    "from": {
+      "color": "yellow",
+      "is_EU": false
+    }
+  },
+  "external": {
+    "validationClock": "???"
+  }
+}

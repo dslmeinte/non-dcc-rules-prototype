@@ -1,0 +1,565 @@
+{
+  "id": "custom_business_rules _20211222 yellow & orange test",
+  "description": "custom business rules for NL border control - yellow & orange test",
+  "rules": [
+    {
+      "id": "end-result",
+      "versions": [
+        {
+          "validFrom": "2021-01-01",
+          "logic": {
+            "and": [
+              {
+                "resultOf": [
+                  "CR-NL-0001"
+                ]
+              },
+              {
+                "resultOf": [
+                  "CR-NL-0002"
+                ]
+              },
+              {
+                "resultOf": [
+                  "CR-NL-0003"
+                ]
+              },
+              {
+                "resultOf": [
+                  "CR-NL-0004"
+                ]
+              },
+              {
+                "resultOf": [
+                  "CR-NL-0005"
+                ]
+              },
+              {
+                "resultOf": [
+                  "CR-NL-0006"
+                ]
+              },
+              {
+                "resultOf": [
+                  "CR-NL-0007"
+                ]
+              },
+              {
+                "resultOf": [
+                  "CR-NL-0009"
+                ]
+              },
+              {
+                "resultOf": [
+                  "CR-NL-0010"
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "CR-NL-0001",
+      "description": "DCC is valid however travelling to The Netherlands from a country with orange colorcode requires a valid negative test result. Ask for a DCC that contains a valid test result.\n\nIn orange VOC, one of the following is required\n- A PCR/NAAT test of no more than 24 hours old\nof\n- A PCR/NAAT test of no more than 48 hours old AND an antigen test of no more than 24 hours old",
+      "validTo": "2030-06-01T00:00:00Z",
+      "versions": [
+        {
+          "validFrom": "2021-05-05T00:00:00Z",
+          "logic": {
+            "if": [
+              {
+                "var": "payload.t.0"
+              },
+              true,
+              {
+                "if": [
+                  {
+                    "===": [
+                      {
+                        "var": "payload.from.color"
+                      },
+                      "orange_very_high_risk"
+                    ]
+                  },
+                  {
+                    "===": [
+                      {
+                        "var": "payload.from.is_EU"
+                      },
+                      false
+                    ]
+                  },
+                  true
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "CR-NL-0002",
+      "description": "DCC is valid however travelling to The Netherlands from a country with orange colorcode requires a valid negative test result. Ask for a DCC that contains a valid test result.\n\nIn orange VOC, one of the following is required\n- A PCR/NAAT test of no more than 24 hours old\nof\n- A PCR/NAAT test of no more than 48 hours old AND an antigen test of no more than 24 hours old",
+      "validTo": "2030-06-01T00:00:00Z",
+      "versions": [
+        {
+          "validFrom": "2021-05-05T00:00:00Z",
+          "logic": {
+            "if": [
+              {
+                "var": "payload.t.0"
+              },
+              true,
+              {
+                "if": [
+                  {
+                    "in": [
+                      {
+                        "var": "payload.from.color"
+                      },
+                      [
+                        "orange_very_high_risk"
+                      ]
+                    ]
+                  },
+                  {
+                    "===": [
+                      {
+                        "var": "payload.from.is_EU"
+                      },
+                      true
+                    ]
+                  },
+                  true
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "CR-NL-0009",
+      "description": "DCC is valid however travelling to The Netherlands from a country with orange colorcode requires a valid negative test result.",
+      "validTo": "2030-06-01T00:00:00Z",
+      "versions": [
+        {
+          "validFrom": "2021-05-05T00:00:00Z",
+          "logic": {
+            "if": [
+              {
+                "var": "payload.t.0"
+              },
+              true,
+              {
+                "if": [
+                  {
+                    "in": [
+                      {
+                        "var": "payload.from.color"
+                      },
+                      [
+                        "orange_high_incidence"
+                      ]
+                    ]
+                  },
+                  {
+                    "===": [
+                      {
+                        "var": "payload.from.is_EU"
+                      },
+                      true
+                    ]
+                  },
+                  true
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "CR-NL-0003",
+      "description": "A second antigen test of maximum 24 hours old is required in orange VOC\n\nIn orange VOC, one of the following is required\n- A PCR/NAAT test of no more than 24 hours old\nof\n- A PCR/NAAT test of no more than 48 hours old AND an antigen test of no more than 24 hours old",
+      "validTo": "2030-06-01T00:00:00Z",
+      "versions": [
+        {
+          "validFrom": "2021-05-05T00:00:00Z",
+          "logic": {
+            "if": [
+              {
+                "var": "payload.t.0"
+              },
+              {
+                "if": [
+                  {
+                    "===": [
+                      {
+                        "var": "payload.from.color"
+                      },
+                      "orange_very_high_risk"
+                    ]
+                  },
+                  {
+                    "if": [
+                      {
+                        "===": [
+                          {
+                            "var": "payload.t.0.tt"
+                          },
+                          "LP6464-4"
+                        ]
+                      },
+                      {
+                        "if": [
+                          {
+                            "not-before": [
+                              {
+                                "plusTime": [
+                                  {
+                                    "var": "external.validationClock"
+                                  },
+                                  0,
+                                  "day"
+                                ]
+                              },
+                              {
+                                "plusTime": [
+                                  {
+                                    "var": "payload.t.0.sc"
+                                  },
+                                  24,
+                                  "hour"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "after": [
+                              {
+                                "plusTime": [
+                                  {
+                                    "var": "external.validationClock"
+                                  },
+                                  0,
+                                  "day"
+                                ]
+                              },
+                              {
+                                "plusTime": [
+                                  {
+                                    "var": "payload.t.0.sc"
+                                  },
+                                  48,
+                                  "hour"
+                                ]
+                              }
+                            ]
+                          },
+                          true
+                        ]
+                      },
+                      true
+                    ]
+                  },
+                  true
+                ]
+              },
+              true
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "CR-NL-0004",
+      "description": "In orange VOC, one of the following is required\n- A PCR/NAAT test of no more than 24 hours old\nof\n- A PCR/NAAT test of no more than 48 hours old AND an antigen test of no more than 24 hours old",
+      "validTo": "2030-06-01T00:00:00Z",
+      "versions": [
+        {
+          "validFrom": "2021-05-05T00:00:00Z",
+          "logic": {
+            "if": [
+              {
+                "var": "payload.t.0"
+              },
+              {
+                "if": [
+                  {
+                    "===": [
+                      {
+                        "var": "payload.from.color"
+                      },
+                      "orange_very_high_risk"
+                    ]
+                  },
+                  {
+                    "if": [
+                      {
+                        "===": [
+                          {
+                            "var": "payload.t.0.tt"
+                          },
+                          "LP6464-4"
+                        ]
+                      },
+                      {
+                        "not-after": [
+                          {
+                            "plusTime": [
+                              {
+                                "var": "external.validationClock"
+                              },
+                              0,
+                              "day"
+                            ]
+                          },
+                          {
+                            "plusTime": [
+                              {
+                                "var": "payload.t.0.sc"
+                              },
+                              48,
+                              "hour"
+                            ]
+                          }
+                        ]
+                      },
+                      true
+                    ]
+                  },
+                  true
+                ]
+              },
+              true
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "CR-NL-0005",
+      "description": "In orange VOC, one of the following is required\n- A PCR/NAAT test of no more than 24 hours old\nof\n- A PCR/NAAT test of no more than 48 hours old AND an antigen test of no more than 24 hours old",
+      "validTo": "2030-06-01T00:00:00Z",
+      "versions": [
+        {
+          "validFrom": "2021-05-05T00:00:00Z",
+          "logic": {
+            "if": [
+              {
+                "var": "payload.t.0"
+              },
+              {
+                "if": [
+                  {
+                    "===": [
+                      {
+                        "var": "payload.from.color"
+                      },
+                      "orange_very_high_risk"
+                    ]
+                  },
+                  {
+                    "if": [
+                      {
+                        "===": [
+                          {
+                            "var": "payload.t.0.tt"
+                          },
+                          "LP217198-3"
+                        ]
+                      },
+                      {
+                        "not-before": [
+                          {
+                            "plusTime": [
+                              {
+                                "var": "external.validationClock"
+                              },
+                              0,
+                              "day"
+                            ]
+                          },
+                          {
+                            "plusTime": [
+                              {
+                                "var": "payload.t.0.sc"
+                              },
+                              24,
+                              "hour"
+                            ]
+                          }
+                        ]
+                      },
+                      true
+                    ]
+                  },
+                  true
+                ]
+              },
+              true
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "CR-NL-0006",
+      "description": "In orange VOC, one of the following is required\n- A PCR/NAAT test of no more than 24 hours old\nof\n- A PCR/NAAT test of no more than 48 hours old AND an antigen test of no more than 24 hours old",
+      "validTo": "2030-06-01T00:00:00Z",
+      "versions": [
+        {
+          "validFrom": "2021-05-05T00:00:00Z",
+          "logic": {
+            "if": [
+              {
+                "var": "payload.t.0"
+              },
+              {
+                "if": [
+                  {
+                    "===": [
+                      {
+                        "var": "payload.from.color"
+                      },
+                      "orange_very_high_risk"
+                    ]
+                  },
+                  {
+                    "if": [
+                      {
+                        "===": [
+                          {
+                            "var": "payload.t.0.tt"
+                          },
+                          "LP217198-3"
+                        ]
+                      },
+                      {
+                        "before": [
+                          {
+                            "plusTime": [
+                              {
+                                "var": "external.validationClock"
+                              },
+                              0,
+                              "day"
+                            ]
+                          },
+                          {
+                            "plusTime": [
+                              {
+                                "var": "payload.t.0.sc"
+                              },
+                              24,
+                              "hour"
+                            ]
+                          }
+                        ]
+                      },
+                      true
+                    ]
+                  },
+                  true
+                ]
+              },
+              true
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "CR-NL-0007",
+      "description": "In orange VOC, one of the following is required\n- A PCR/NAAT test of no more than 24 hours old\nof\n- A PCR/NAAT test of no more than 48 hours old AND an antigen test of no more than 24 hours old",
+      "validTo": "2030-06-01T00:00:00Z",
+      "versions": [
+        {
+          "validFrom": "2021-05-05T00:00:00Z",
+          "logic": {
+            "if": [
+              {
+                "var": "payload.t.0"
+              },
+              {
+                "if": [
+                  {
+                    "===": [
+                      {
+                        "var": "payload.from.color"
+                      },
+                      "orange_very_high_risk"
+                    ]
+                  },
+                  {
+                    "if": [
+                      {
+                        "in": [
+                          {
+                            "var": "payload.t.0.tt"
+                          },
+                          [
+                            "LP217198-3",
+                            "LP6464-4"
+                          ]
+                        ]
+                      },
+                      true,
+                      false
+                    ]
+                  },
+                  true
+                ]
+              },
+              true
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "CR-NL-0010",
+      "description": "DCC is valid however travelling to The Netherlands from a country outside the EU/Schengen with yellow or orange colorcode requires a valid negative test result.",
+      "validTo": "2030-06-01T00:00:00Z",
+      "versions": [
+        {
+          "validFrom": "2021-05-05T00:00:00Z",
+          "logic": {
+            "if": [
+              {
+                "var": "payload.t.0"
+              },
+              true,
+              {
+                "if": [
+                  {
+                    "in": [
+                      {
+                        "var": "payload.from.color"
+                      },
+                      [
+                        "yellow",
+                        "orange"
+                      ]
+                    ]
+                  },
+                  {
+                    "===": [
+                      {
+                        "var": "payload.from.is_EU"
+                      },
+                      true
+                    ]
+                  },
+                  true
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -60,6 +60,74 @@
       ]
     },
     {
+      "id": "color",
+      "versions": [
+        {
+          "validFrom": "2021-01-01",
+          "logic": {
+            "if": [
+              {
+                "in": [
+                  {
+                    "var": "external.countryCode"
+                  },
+                  [
+                    "US"
+                  ]
+                ]
+              },
+              "yellow",
+              "unknown"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "is_EU",
+      "versions": [
+        {
+          "validFrom": "2021-01-01",
+          "logic": {
+            "in": [
+              {
+                "var": "external.countryCode"
+              },
+              [
+                "AT",
+                "BE",
+                "BG",
+                "CY",
+                "CZ",
+                "DE",
+                "DK",
+                "EE",
+                "ES",
+                "FI",
+                "FR",
+                "GR",
+                "HU",
+                "HR",
+                "IE",
+                "IT",
+                "LT",
+                "LU",
+                "LV",
+                "MT",
+                "NL",
+                "PL",
+                "PT",
+                "RO",
+                "SE",
+                "SI",
+                "SK"
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
       "id": "CR-NL-0001",
       "description": "DCC is valid however travelling to The Netherlands from a country with orange colorcode requires a valid negative test result. Ask for a DCC that contains a valid test result.\n\nIn orange VOC, one of the following is required\n- A PCR/NAAT test of no more than 24 hours old\nof\n- A PCR/NAAT test of no more than 48 hours old AND an antigen test of no more than 24 hours old",
       "validTo": "2030-06-01T00:00:00Z",
@@ -77,7 +145,9 @@
                   {
                     "===": [
                       {
-                        "var": "payload.from.color"
+                        "resultOf": [
+                          "color"
+                        ]
                       },
                       "orange_very_high_risk"
                     ]
@@ -85,7 +155,9 @@
                   {
                     "===": [
                       {
-                        "var": "payload.from.is_EU"
+                        "resultOf": [
+                          "is_EU"
+                        ]
                       },
                       false
                     ]
@@ -116,7 +188,9 @@
                   {
                     "in": [
                       {
-                        "var": "payload.from.color"
+                        "resultOf": [
+                          "color"
+                        ]
                       },
                       [
                         "orange_very_high_risk"
@@ -126,7 +200,9 @@
                   {
                     "===": [
                       {
-                        "var": "payload.from.is_EU"
+                        "resultOf": [
+                          "is_EU"
+                        ]
                       },
                       true
                     ]
@@ -157,7 +233,9 @@
                   {
                     "in": [
                       {
-                        "var": "payload.from.color"
+                        "resultOf": [
+                          "color"
+                        ]
                       },
                       [
                         "orange_high_incidence"
@@ -167,7 +245,9 @@
                   {
                     "===": [
                       {
-                        "var": "payload.from.is_EU"
+                        "resultOf": [
+                          "is_EU"
+                        ]
                       },
                       true
                     ]
@@ -197,7 +277,9 @@
                   {
                     "===": [
                       {
-                        "var": "payload.from.color"
+                        "resultOf": [
+                          "color"
+                        ]
                       },
                       "orange_very_high_risk"
                     ]
@@ -290,7 +372,9 @@
                   {
                     "===": [
                       {
-                        "var": "payload.from.color"
+                        "resultOf": [
+                          "color"
+                        ]
                       },
                       "orange_very_high_risk"
                     ]
@@ -356,7 +440,9 @@
                   {
                     "===": [
                       {
-                        "var": "payload.from.color"
+                        "resultOf": [
+                          "color"
+                        ]
                       },
                       "orange_very_high_risk"
                     ]
@@ -422,7 +508,9 @@
                   {
                     "===": [
                       {
-                        "var": "payload.from.color"
+                        "resultOf": [
+                          "color"
+                        ]
                       },
                       "orange_very_high_risk"
                     ]
@@ -488,7 +576,9 @@
                   {
                     "===": [
                       {
-                        "var": "payload.from.color"
+                        "resultOf": [
+                          "color"
+                        ]
                       },
                       "orange_very_high_risk"
                     ]
@@ -537,7 +627,9 @@
                   {
                     "in": [
                       {
-                        "var": "payload.from.color"
+                        "resultOf": [
+                          "color"
+                        ]
                       },
                       [
                         "yellow",
@@ -548,7 +640,9 @@
                   {
                     "===": [
                       {
-                        "var": "payload.from.is_EU"
+                        "resultOf": [
+                          "is_EU"
+                        ]
                       },
                       true
                     ]

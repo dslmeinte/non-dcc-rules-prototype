@@ -3,7 +3,7 @@ import {useState} from "react"
 
 import {pretty, tryParse} from "../utils/json"
 import {evaluateRules, ResultsMap} from "../engine/evaluator"
-import {createSchemaValidator} from "../utils/schema-validator";
+import {createSchemaValidator} from "../utils/schema-validator"
 
 
 const ReactiveTextArea = ({ id, value, setter }: { id: string, value: string, setter: (newValue: string) => void }) =>

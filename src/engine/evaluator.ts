@@ -1,11 +1,6 @@
-import {
-    CertLogicExpression,
-    CertLogicOperation,
-    evaluate
-} from "certlogic-js"
-import {isInt} from "certlogic-js/dist/internals"
+import {CertLogicExpression, evaluate} from "certlogic-js"
 
-import {operationDataFrom, treeFlatMap} from "./tree-walker"
+import {mapOperations, treeFlatMap} from "./tree-mapper"
 import {isResultOf, Rule, Rules, RuleVersion} from "./types"
 import {mapValues, reverse, sortBy} from "../utils/functional"
 import {dependencyOrderOf} from "../utils/topological-sort"
@@ -49,30 +44,12 @@ export const dependenciesOf = (rootExpr: CertLogicExpression): string[] =>   // 
 
 
 export type ResultsMap = { [ruleId: string]: any }
-export const replaceWithResults = (rootExpr: CertLogicExpression, resultsMap: ResultsMap): CertLogicExpression => {   // (exported for unit tests only)
-    const replace_ = (expr: CertLogicExpression): CertLogicExpression => {
-        if (typeof expr === "string" || isInt(expr) || typeof expr === "boolean") {
-            return expr
-        }
-        if (Array.isArray(expr)) {
-            return (expr as CertLogicExpression[]).map(replace_)
-        }
-        if (typeof expr === "object") {
-            const { operator, values } = operationDataFrom(expr)
-            if (operator === "resultOf") {
-                return resultsMap[values[0]] as CertLogicExpression
-            }
-            if (operator === "var") {
-                return expr
-            }
-            return {
-                [operator]: (values as CertLogicExpression[]).map(replace_)
-            } as CertLogicOperation
-        }
-        throw new Error(`invalid CertLogic expression: ${expr}`)    // (never reached)
-    }
-    return replace_(rootExpr)
-}
+export const replaceWithResults = (rootExpr: CertLogicExpression, resultsMap: ResultsMap): CertLogicExpression =>
+    mapOperations(
+        rootExpr,
+        (_, operator) => operator === "resultOf",
+        (_1, _2, values) => resultsMap[values[0]] as CertLogicExpression
+    )
 
 
 export const evaluateRules = (rules: Rules, data: any, now: Date): ResultsMap => {

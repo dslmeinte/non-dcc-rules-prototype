@@ -1,11 +1,13 @@
 {
   "payload": {
-    "from": {
-      "color": "yellow",
-      "is_EU": false
-    }
+    "v": [
+      {
+        "...keys...": "...values..."
+      }
+    ]
   },
   "external": {
+    "countryCode": "US",
     "validationClock": "???"
   }
 }

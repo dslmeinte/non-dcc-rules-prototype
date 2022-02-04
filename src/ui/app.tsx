@@ -65,7 +65,8 @@ export const App = () => {
     return <main>
         <h1>Non-DCC business rules tech demo</h1>
         <p>
-            This mini-app is a tech demo for the non-DCC business rules proposal currently being drafted by the Taskforce Business Rules of the eHN.
+            This mini-app is a tech demo for the <a href="https://webgate.ec.europa.eu/fpfis/wikis/display/eHN/Draft+proposal%3A+Non-DCC+business+rules" target="_blank">non-DCC business rules proposal</a><sup>*</sup> currently being drafted by the Taskforce Business Rules of the eHN.
+            &nbsp;&nbsp;<small>*) Requires access to EU Confluence.</small>
         </p>
         <p>
             The following figure explains things succinctly.

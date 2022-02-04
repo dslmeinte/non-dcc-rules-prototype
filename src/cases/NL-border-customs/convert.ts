@@ -11,17 +11,23 @@ const customRules: Rule[] = require(`../../../src/cases/NL-border-customs/${file
 const ruleIds = [ ...(customRules.map((rule) => rule.Identifier)) ].sort()
 
 
+const deNL = (ruleID: string) => {
+    const parts = ruleID.split("-")
+    return `${parts[0]}-${parts[2]}`
+}
+
+
 const convertedRules = {
     id: fileName,
     description: "custom business rules for NL border control - yellow & orange test",
     rules: [
         {
-            id: "end-result",
+            id: "CR-combined",
             versions: [
                 {
                     validFrom: "2021-01-01",
                     logic: and_(
-                        ...ruleIds.map((id) => ({ resultOf: [id] }) as any as CertLogicExpression)
+                        ...ruleIds.map((id) => ({ resultOf: [deNL(id)] }) as any as CertLogicExpression)
                     )
                 }
             ]
@@ -58,7 +64,7 @@ const convertedRules = {
         },
         ...customRules
             .map((rule) => ({
-                id: rule.Identifier,
+                id: deNL(rule.Identifier),
                 description: rule.Description.find((desc) => desc.lang === "en")!.desc,
                 validTo: rule.ValidTo,
                 versions: [     // only one version of each rule (~ Identifier)

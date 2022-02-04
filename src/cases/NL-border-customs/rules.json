@@ -3,7 +3,7 @@
   "description": "custom business rules for NL border control - yellow & orange test",
   "rules": [
     {
-      "id": "end-result",
+      "id": "CR-combined",
       "versions": [
         {
           "validFrom": "2021-01-01",
@@ -11,47 +11,47 @@
             "and": [
               {
                 "resultOf": [
-                  "CR-NL-0001"
+                  "CR-0001"
                 ]
               },
               {
                 "resultOf": [
-                  "CR-NL-0002"
+                  "CR-0002"
                 ]
               },
               {
                 "resultOf": [
-                  "CR-NL-0003"
+                  "CR-0003"
                 ]
               },
               {
                 "resultOf": [
-                  "CR-NL-0004"
+                  "CR-0004"
                 ]
               },
               {
                 "resultOf": [
-                  "CR-NL-0005"
+                  "CR-0005"
                 ]
               },
               {
                 "resultOf": [
-                  "CR-NL-0006"
+                  "CR-0006"
                 ]
               },
               {
                 "resultOf": [
-                  "CR-NL-0007"
+                  "CR-0007"
                 ]
               },
               {
                 "resultOf": [
-                  "CR-NL-0009"
+                  "CR-0009"
                 ]
               },
               {
                 "resultOf": [
-                  "CR-NL-0010"
+                  "CR-0010"
                 ]
               }
             ]
@@ -128,7 +128,7 @@
       ]
     },
     {
-      "id": "CR-NL-0001",
+      "id": "CR-0001",
       "description": "DCC is valid however travelling to The Netherlands from a country with orange colorcode requires a valid negative test result. Ask for a DCC that contains a valid test result.\n\nIn orange VOC, one of the following is required\n- A PCR/NAAT test of no more than 24 hours old\nof\n- A PCR/NAAT test of no more than 48 hours old AND an antigen test of no more than 24 hours old",
       "validTo": "2030-06-01T00:00:00Z",
       "versions": [
@@ -171,7 +171,7 @@
       ]
     },
     {
-      "id": "CR-NL-0002",
+      "id": "CR-0002",
       "description": "DCC is valid however travelling to The Netherlands from a country with orange colorcode requires a valid negative test result. Ask for a DCC that contains a valid test result.\n\nIn orange VOC, one of the following is required\n- A PCR/NAAT test of no more than 24 hours old\nof\n- A PCR/NAAT test of no more than 48 hours old AND an antigen test of no more than 24 hours old",
       "validTo": "2030-06-01T00:00:00Z",
       "versions": [
@@ -216,7 +216,7 @@
       ]
     },
     {
-      "id": "CR-NL-0009",
+      "id": "CR-0009",
       "description": "DCC is valid however travelling to The Netherlands from a country with orange colorcode requires a valid negative test result.",
       "validTo": "2030-06-01T00:00:00Z",
       "versions": [
@@ -261,7 +261,7 @@
       ]
     },
     {
-      "id": "CR-NL-0003",
+      "id": "CR-0003",
       "description": "A second antigen test of maximum 24 hours old is required in orange VOC\n\nIn orange VOC, one of the following is required\n- A PCR/NAAT test of no more than 24 hours old\nof\n- A PCR/NAAT test of no more than 48 hours old AND an antigen test of no more than 24 hours old",
       "validTo": "2030-06-01T00:00:00Z",
       "versions": [
@@ -356,7 +356,7 @@
       ]
     },
     {
-      "id": "CR-NL-0004",
+      "id": "CR-0004",
       "description": "In orange VOC, one of the following is required\n- A PCR/NAAT test of no more than 24 hours old\nof\n- A PCR/NAAT test of no more than 48 hours old AND an antigen test of no more than 24 hours old",
       "validTo": "2030-06-01T00:00:00Z",
       "versions": [
@@ -424,7 +424,7 @@
       ]
     },
     {
-      "id": "CR-NL-0005",
+      "id": "CR-0005",
       "description": "In orange VOC, one of the following is required\n- A PCR/NAAT test of no more than 24 hours old\nof\n- A PCR/NAAT test of no more than 48 hours old AND an antigen test of no more than 24 hours old",
       "validTo": "2030-06-01T00:00:00Z",
       "versions": [
@@ -492,7 +492,7 @@
       ]
     },
     {
-      "id": "CR-NL-0006",
+      "id": "CR-0006",
       "description": "In orange VOC, one of the following is required\n- A PCR/NAAT test of no more than 24 hours old\nof\n- A PCR/NAAT test of no more than 48 hours old AND an antigen test of no more than 24 hours old",
       "validTo": "2030-06-01T00:00:00Z",
       "versions": [
@@ -560,7 +560,7 @@
       ]
     },
     {
-      "id": "CR-NL-0007",
+      "id": "CR-0007",
       "description": "In orange VOC, one of the following is required\n- A PCR/NAAT test of no more than 24 hours old\nof\n- A PCR/NAAT test of no more than 48 hours old AND an antigen test of no more than 24 hours old",
       "validTo": "2030-06-01T00:00:00Z",
       "versions": [
@@ -610,7 +610,7 @@
       ]
     },
     {
-      "id": "CR-NL-0010",
+      "id": "CR-0010",
       "description": "DCC is valid however travelling to The Netherlands from a country outside the EU/Schengen with yellow or orange colorcode requires a valid negative test result.",
       "validTo": "2030-06-01T00:00:00Z",
       "versions": [

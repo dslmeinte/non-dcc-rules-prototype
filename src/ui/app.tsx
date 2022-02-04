@@ -50,10 +50,10 @@ export const App = () => {
         ? dataValidator(data).filter((error) => error.message !== undefined).map((error) => error.message!)
         : []
     // TODO  (improve types...)
-    const evaluation = dataIsValid && evaluateRules(rules, data, now) as ResultsMap // assume non-cyclicity of rules' dependency graph
+    const evaluation = dataIsValid && evaluateRules(rules, data, now)   // assume non-cyclicity of rules' dependency graph
 
     return <main>
-        <h1>Prototype non-DCC-rules</h1>
+        <h1>Non-DCC business rules tech demo</h1>
         <div className="wrapper">
             <div>
                 <span className="label">Input data to rules</span>

@@ -18,6 +18,9 @@ const couldBeOperation = (expr: unknown): expr is object =>
 export const isResultOf = (expr: unknown): expr is ResultOf =>
     couldBeOperation(expr) && Object.keys(expr)[0] === "resultOf"
 
+export const resultOf_ = (ruleId: string): CertLogicExpression =>
+    ({ resultOf: [ruleId] }) as any as CertLogicExpression
+
 
 export type Rules = {
     id: string

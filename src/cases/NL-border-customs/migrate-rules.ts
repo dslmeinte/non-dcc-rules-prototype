@@ -1,9 +1,9 @@
-import {CertLogicExpression} from "certlogic-js"
 import {and_, binOp_, if_, var_} from "certlogic-js/dist/factories"
 import {Rule} from "dcc-business-rules-utils"
 import {writeFileSync} from "fs"
 
 import {mapOperations} from "../../engine/tree-mapper"
+import {resultOf_, Rules} from "../../engine/types"
 
 
 const fileName = "custom_business_rules _20211222 yellow & orange test"
@@ -17,9 +17,8 @@ const deNL = (ruleID: string) => {
 }
 
 
-const convertedRules = {
-    id: fileName,
-    description: "custom business rules for NL border control - yellow & orange test",
+const convertedRules: Rules = {
+    id: "custom business rules for NL border control",
     rules: [
         {
             id: "CR-combined",
@@ -27,7 +26,7 @@ const convertedRules = {
                 {
                     validFrom: "2021-01-01",
                     logic: and_(
-                        ...ruleIds.map((id) => ({ resultOf: [deNL(id)] }) as any as CertLogicExpression)
+                        ...ruleIds.map((id) => resultOf_(deNL(id)))
                     )
                 }
             ]
@@ -65,7 +64,6 @@ const convertedRules = {
         ...customRules
             .map((rule) => ({
                 id: deNL(rule.Identifier),
-                description: rule.Description.find((desc) => desc.lang === "en")!.desc,
                 validTo: rule.ValidTo,
                 versions: [     // only one version of each rule (~ Identifier)
                     {
@@ -73,11 +71,11 @@ const convertedRules = {
                         logic: mapOperations(
                             rule.Logic,
                             (_, operator, values) => operator === "var" && (values === "payload.from.color" || values === "payload.from.is_EU"),
-                            (_1, _2, values) => ({ "resultOf": [ values.substring(values.lastIndexOf(".") + 1) ] }) as any as CertLogicExpression
+                            (_1, _2, values) => resultOf_(values.substring(values.lastIndexOf(".") + 1))
                         )
-
                     }
-                ]
+                ],
+                description: rule.Description.find((desc) => desc.lang === "en")!.desc,
             }))
     ]
 }

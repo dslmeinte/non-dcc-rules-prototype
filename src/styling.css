@@ -1,6 +1,6 @@
 body {
     font-family: "Fira Sans", "Helvetica Neue", sans-serif;
-    font-size: 16px;
+    font-size: 18px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -58,6 +58,19 @@ th {
 }
 
 .tt {
-    font-family: "Meno", "Fira Code", monospace;
+    font-family: Menlo, Monaco, "Lucida Console", "Fira Code", "Courier New", monospace, serif;
+}
+
+.ID {
+    color: darkorange;
+    font-family: Menlo, Monaco, "Lucida Console", "Fira Code", "Courier New", monospace, serif;
+}
+
+.green {
+    color: green;
+}
+
+.red {
+    color: red;
 }
 

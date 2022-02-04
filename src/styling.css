@@ -45,11 +45,12 @@ span.label {
 
 table {
     border-collapse: collapse;
+    width: 90%;
 }
 
 td, th {
     border: 1px solid #999;
-    padding: 3px;
+    padding: 4px;
     text-align: left;
 }
 
@@ -72,5 +73,9 @@ th {
 
 .red {
     color: red;
+}
+
+.centered {
+    text-align: center;
 }
 

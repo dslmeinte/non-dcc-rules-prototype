@@ -3,7 +3,11 @@ import {useState} from "react"
 import ReactJson from "react-json-view"
 
 import {pretty, tryParse} from "../utils/json"
-import {evaluateRules, ResultsMap} from "../engine/evaluator"
+import {
+    evaluateRules, prepareEvaluation,
+    ResultsMap,
+    RuleDependencies
+} from "../engine/evaluator"
 import {createSchemaValidator} from "../utils/schema-validator"
 
 
@@ -14,20 +18,24 @@ const ReactiveTextArea = ({ id, value, setter }: { id: string, value: string, se
         value={value} />
 
 
-const ResultsTable = ({ results }: { results: ResultsMap }) =>
+const ResultsTable = ({ results, ruleDependencies }: { results: ResultsMap, ruleDependencies: RuleDependencies }) =>
     <table>
         <thead>
             <tr>
-                <th>rule ID</th>
+                <th style={{ width: "8em" }}>rule ID</th>
                 <th>result</th>
+                <th>dependencies</th>
             </tr>
         </thead>
         <tbody>
         {Object.entries(results)
             .map(([ ruleId, result ], index) =>
                 <tr key={index}>
-                    <td className="tt">{ruleId}</td>
+                    <td className="ID">{ruleId}</td>
                     <td className="tt">{pretty(result)}</td>
+                    <td style={{ fontSize: "9pt" }}>{ruleDependencies[ruleId].map((depRuleId, index) =>
+                        <span className="ID" key={index}>{depRuleId}&nbsp; </span>
+                    )}</td>
                 </tr>
             )
         }
@@ -48,10 +56,11 @@ export const App = () => {
     const data = tryParse(dataAsText)
     const dataIsValid = !(data instanceof Error)
     const validationErrorMessages = dataIsValid
-        ? dataValidator(data).filter((error) => error.message !== undefined).map((error) => error.message!)
+        ? dataValidator(data).filter((error) => error.message !== undefined).map((error) => `/${error.instancePath} ${error.message!}.`)
         : []
-    // TODO  (improve types...)
-    const evaluation = dataIsValid && evaluateRules(rules, data, now)   // assume non-cyclicity of rules' dependency graph
+    const [ _, ruleDependencies, dependencyOrder ] = prepareEvaluation(rules, now)
+    const rulesAreEvaluatable = dependencyOrder !== false
+    const evaluation = dataIsValid && rulesAreEvaluatable && evaluateRules(rules, data, now)
 
     return <main>
         <h1>Non-DCC business rules tech demo</h1>
@@ -61,12 +70,12 @@ export const App = () => {
         <p>
             The following figure explains things succinctly.
         </p>
-        <div style={{ textAlign: "center" }}>
+        <div className="centered">
             <img src="engine.svg" width={800} alt="engine framework" />
         </div>
         <div className="wrapper">
             <div>
-                <span className="label">Rules</span>
+                <span className="label">Business Rules</span>
                 <p>
                     Use case: <em>(NL) custom border rules</em><br/>
                 </p>
@@ -86,7 +95,7 @@ export const App = () => {
                     onDelete={(event) => { console.dir(event); return true }}
                 />
                 <p>
-                    Unfold/expand the rules for details.
+                    Unfold/expand the <span className="tt">rules</span> for details.
                 </p>
             </div>
             <div>
@@ -117,13 +126,19 @@ export const App = () => {
                 </p>
             </div>
             <div>
-                <span className="label">Input data to rules</span>
+                <span className="label">Input Data</span>
+                <p>
+                    The following Input Data in JSON format will be fed into the Rules Engine for evaluation:
+                </p>
                 <ReactiveTextArea id="data" value={dataAsText} setter={setDataAsText} />
+                <p>
+                    You can edit the Input Data freely: it will be validated and immediately, and the Result of the evaluation will be updated automatically as well.
+                </p>
             </div>
             <div>
                 <span className="label">Validation</span>
                 <p>
-                    The input data is validated against a JSON Schema that's specific to these rules.
+                    The Input Data is validated against a JSON Schema that's specific to these rules.
                 </p>
                 <span className="label">Errors:</span>
                 {dataIsValid
@@ -135,12 +150,34 @@ export const App = () => {
                 }
             </div>
             <div>
-                <span className="label">Evaluation result</span>
-                {dataIsValid
-                    ? <ResultsTable results={evaluation as ResultsMap} />
-                    : <p>(Did not run evaluation because input data didn't validate.)</p>}
-                <span>(Verification timestamp: <em>{now.toISOString()}</em>)</span>
+                <span className="label">Result</span>
+                <p>
+                    The result of the evaluation of the Business Rules against the Input Data above is as follows in tabular form:
+                </p>
+                {!dataIsValid && <p>(Did not run evaluation because input data didn't validate.)</p>}
+                {dataIsValid && rulesAreEvaluatable && <ResultsTable results={evaluation as ResultsMap} ruleDependencies={ruleDependencies} />}
             </div>
+            {dataIsValid && rulesAreEvaluatable &&
+                <div>
+                    <p>
+                        In JSON format it would be:
+                    </p>
+                    <ReactJson
+                        src={evaluation as object}
+                        name={false}
+                        style={{ fontSize: "12pt" }}
+                    />
+                    {/*<pre>{pretty(evaluation)}</pre>*/}
+                    <p>
+                        This JSON would then be processed further,
+                        e.g. to show a message for every <span className="ID">CR-</span>rule that evaluated to <span className="tt">false</span>,
+                        and to show a ✅/❌ depending on the result of <span className="ID">CR-combined</span>.
+                    </p>
+                    <p>
+                        Note that the result is generated in dependency order.
+                    </p>
+                </div>
+            }
         </div>
         <h2>Attribution</h2>
         <p>

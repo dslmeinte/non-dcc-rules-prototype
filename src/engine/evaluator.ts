@@ -52,10 +52,23 @@ export const replaceWithResults = (rootExpr: CertLogicExpression, resultsMap: Re
     )
 
 
-export const evaluateRules = (rules: Rules, data: any, now: Date): ResultsMap => {
+export type RuleDependencies = { [ruleId: string]: string[] }
+export type DependencyOrder = false | string[]
+export const prepareEvaluation = (rules: Rules, now: Date):
+        [
+            applicableRuleLogic: RuleLogicMap,
+            ruleDependencies: RuleDependencies,
+            dependencyOrder: DependencyOrder
+        ] => {
     const applicableRuleLogic_ = applicableRuleLogic(sortVersionsByValidFrom(rules), now)
     const ruleDependencies_ = mapValues(applicableRuleLogic_, dependenciesOf)
     const dependencyOrder = dependencyOrderOf(Object.keys(applicableRuleLogic_), (ruleId) => ruleDependencies_[ruleId])
+    return [ applicableRuleLogic_, ruleDependencies_, dependencyOrder ]
+}
+// TODO  bundle this in a nicer structure
+
+export const evaluateRules = (rules: Rules, data: any, now: Date): ResultsMap => {
+    const [ applicableRuleLogic_, _, dependencyOrder ] = prepareEvaluation(rules, now)
     if (dependencyOrder === false) {
         throw new Error(`rules versions to evaluate exhibit a cycle in their dependency on one another`)
     }

@@ -26,6 +26,7 @@ h1 {
 pre {
     font-family: Menlo, Monaco, "Lucida Console", "Fira Code", "Courier New", monospace, serif;
     white-space: pre-wrap;
+    font-size: 8pt;
 }
 
 textarea {
@@ -77,5 +78,58 @@ th {
 
 .centered {
     text-align: center;
+}
+
+
+/*for the fancy slider:*/
+
+.switch {
+    display: inline-block;
+    height: 34px;
+    position: relative;
+    width: 60px;
+    margin: 0.5em;
+}
+
+.switch input {
+    display: inline-block;
+}
+
+.slider {
+    background-color: #66bb6a;
+    bottom: 0;
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: .4s;
+}
+
+.slider:before {
+    background-color: #fff;
+    bottom: 4px;
+    content: "";
+    height: 26px;
+    left: 4px;
+    position: absolute;
+    transition: .2s;
+    width: 26px;
+}
+
+input:checked + .slider {
+    background-color: #ccc;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
 }
 

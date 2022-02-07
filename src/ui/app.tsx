@@ -65,6 +65,8 @@ export const App = () => {
     const rulesAreEvaluatable = dependencyOrder !== false
     const evaluation = dataIsValid && rulesAreEvaluatable && evaluateRules(useCase.rules, data, now)
 
+    const [plainJson, setPlainJson] = useState(false)
+
     return <main>
         <h1>Non-DCC business rules tech demo</h1>
         <p>
@@ -83,21 +85,32 @@ export const App = () => {
                 <p>
                     Use case: <em>{useCase.description}</em><br/>
                 </p>
-                <ReactJson
-                    src={useCase.rules}
-                    name={false}
-                    style={{ fontSize: "9pt" }}
-                    iconStyle={"square"}
-                    collapsed={2}
-                    // shouldCollapse={(fieldInfo) => { console.dir(fieldInfo); return false }}
-                    displayObjectSize={false}
-                    displayDataTypes={false}
-                    quotesOnKeys={false}
-                    // displayArrayKey={false} <-- not implemented yet?
-                    onEdit={(event) => { console.dir(event); return true }}
-                    onAdd={(event) => { console.dir(event); return true }}
-                    onDelete={(event) => { console.dir(event); return true }}
-                />
+                <div className="switch-container">
+                    <span>JSON style: <em>fancy</em></span>
+                    <label className="switch" htmlFor="checkbox">
+                        <input type="checkbox" id="checkbox" onChange={(event) => { setPlainJson(event.target.checked) }} />
+                        <div className="slider round"></div>
+                    </label>
+                    <span><em>plain</em></span>
+                </div>
+                {plainJson
+                    ? <pre>{pretty(useCase.rules)}</pre>
+                    : <ReactJson
+                        src={useCase.rules}
+                        name={false}
+                        style={{ fontSize: "9pt" }}
+                        iconStyle={"square"}
+                        collapsed={2}
+                        // shouldCollapse={(fieldInfo) => { console.dir(fieldInfo); return false }}
+                        displayObjectSize={false}
+                        displayDataTypes={false}
+                        quotesOnKeys={false}
+                        // displayArrayKey={false} <-- not implemented yet?
+                        onEdit={(event) => { console.dir(event); return true }}
+                        onAdd={(event) => { console.dir(event); return true }}
+                        onDelete={(event) => { console.dir(event); return true }}
+                    />
+                }
                 <p>
                     Unfold/expand the <span className="tt">rules</span> elements for details.
                 </p>

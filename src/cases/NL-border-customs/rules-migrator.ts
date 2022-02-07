@@ -1,6 +1,5 @@
 import {and_, binOp_, if_, var_} from "certlogic-js/dist/factories"
 import {Rule} from "dcc-business-rules-utils"
-import {writeFileSync} from "fs"
 
 import {mapOperations} from "../../engine/tree-mapper"
 import {resultOf_, Rules} from "../../engine/types"
@@ -81,5 +80,5 @@ const convertedRules: Rules = {
 }
 
 
-writeFileSync("src/cases/NL-border-customs/rules.json", JSON.stringify(convertedRules, null, 2))
+export default convertedRules
 

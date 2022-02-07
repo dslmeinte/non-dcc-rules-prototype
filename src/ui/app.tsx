@@ -9,6 +9,7 @@ import {
     RuleDependencies
 } from "../engine/evaluator"
 import {createSchemaValidator} from "../utils/schema-validator"
+import useCases from "../cases/use-cases"
 
 
 const ReactiveTextArea = ({ id, value, setter }: { id: string, value: string, setter: (newValue: string) => void }) =>
@@ -44,23 +45,22 @@ const ResultsTable = ({ results, ruleDependencies }: { results: ResultsMap, rule
 
 
 export const App = () => {
-    const rules = require("../cases/NL-border-customs/rules.json")
+    const useCase = useCases[0]
 
     const now = new Date()
-    const exampleData = require("../cases/NL-border-customs/example-data.json")
-    exampleData.external.validationClock = now.toISOString()
+    const exampleData = useCase.exampleDataOn(now)
     const [dataAsText, setDataAsText] = useState(pretty(exampleData))
 
-    const dataValidator = createSchemaValidator(require("../cases/NL-border-customs/data.schema.json"))
+    const dataValidator = createSchemaValidator(useCase.inputDataSchema)
 
     const data = tryParse(dataAsText)
     const dataIsValid = !(data instanceof Error)
     const validationErrorMessages = dataIsValid
         ? dataValidator(data).filter((error) => error.message !== undefined).map((error) => `/${error.instancePath} ${error.message!}.`)
         : []
-    const [ _, ruleDependencies, dependencyOrder ] = prepareEvaluation(rules, now)
+    const [ _, ruleDependencies, dependencyOrder ] = prepareEvaluation(useCase.rules, now)
     const rulesAreEvaluatable = dependencyOrder !== false
-    const evaluation = dataIsValid && rulesAreEvaluatable && evaluateRules(rules, data, now)
+    const evaluation = dataIsValid && rulesAreEvaluatable && evaluateRules(useCase.rules, data, now)
 
     return <main>
         <h1>Non-DCC business rules tech demo</h1>
@@ -78,10 +78,10 @@ export const App = () => {
             <div>
                 <span className="label">Business Rules</span>
                 <p>
-                    Use case: <em>(NL) custom border rules</em><br/>
+                    Use case: <em>{useCase.description}</em><br/>
                 </p>
                 <ReactJson
-                    src={rules}
+                    src={useCase.rules}
                     name={false}
                     style={{ fontSize: "9pt" }}
                     iconStyle={"square"}
@@ -96,7 +96,7 @@ export const App = () => {
                     onDelete={(event) => { console.dir(event); return true }}
                 />
                 <p>
-                    Unfold/expand the <span className="tt">rules</span> for details.
+                    Unfold/expand the <span className="tt">rules</span> elements for details.
                 </p>
             </div>
             <div>
@@ -104,12 +104,7 @@ export const App = () => {
                 <p>
                     Left is shown a set of rules defining an <em>automated decision-making</em> (ADM) process.
                 </p>
-                <p>
-                    The rules with IDs <span className="ID">color</span>, and <span className="ID">is_EU</span> inspect the value of the field <span className="ID">external.countryCode</span>, which is the code for the country of departure.
-                    The results of these two rules are then used by the rules <span className="ID">CR-0001</span>&hellip;<span className="ID">CR-0010</span> which each produce <span className="ID">true/false</span>.
-                    (There is no rule <span className="ID">CR-0008</span>.)
-                    Finally, the rule <span className="ID">CR-combined</span> combines the results of the rules <span className="ID">CR-0001</span>&hellip;<span className="ID">CR-0010</span> by computing whether these all produced a <span className="ID">true</span> value.
-                </p>
+                {useCase.explanation}
                 <p>
                     These rules are defined according to a format that's specified through a JSON Schema + some additional additional constraints.
                     Each rule consists of an ID, an array of versions, and optionally a final valid-until date, and description.
@@ -171,8 +166,8 @@ export const App = () => {
                     {/*<pre>{pretty(evaluation)}</pre>*/}
                     <p>
                         This JSON would then be processed further,
-                        e.g. to show a message for every <span className="ID">CR-</span>rule that evaluated to <span className="tt">false</span>,
-                        and to show a ✅/❌ depending on the result of <span className="ID">CR-combined</span>.
+                        e.g. to show a message for every rule that evaluated to <span className="tt">false</span>,
+                        and to show a ✅/❌ depending on the final result.
                     </p>
                     <p>
                         Note that the result is generated in dependency order.

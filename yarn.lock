@@ -2690,10 +2690,10 @@
     "react" "^17.0.2"
     "react-dom" "^17.0.2"
 
-"certlogic-js@^1.0.4", "certlogic-js@^1.1.1":
-  "integrity" "sha512-rihheN1WpvweZz36RQ/9HdP5bLcD6ofFvZJrtQV4fFZ4DjQnzXNdtH+NXlTHR+i85uMbIfbrkaxP80xgJcsP8Q=="
-  "resolved" "https://registry.npmjs.org/certlogic-js/-/certlogic-js-1.1.1.tgz"
-  "version" "1.1.1"
+"certlogic-js@^1.0.4", "certlogic-js@^1.1.1", "certlogic-js@^1.1.2":
+  "integrity" "sha512-ufAI05BW5qarzBxyEaPbQ4lyLiAhdXyJ+xryp9hN78kH0nAW0K83ky6uqx/7GQDU84en4nnIhX6WgSTGySBMKw=="
+  "resolved" "https://registry.npmjs.org/certlogic-js/-/certlogic-js-1.1.2.tgz"
+  "version" "1.1.2"
 
 "chai@^4.3.6":
   "integrity" "sha512-bbcp3YfHCUzMOvKqsztczerVgBKSsEijCySNlHHbX3VG1nskvqjz5Rfso1gGwD6w6oOV3eI60pKuMOV5MV7p3Q=="

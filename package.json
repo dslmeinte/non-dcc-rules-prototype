@@ -23,7 +23,7 @@
     "ajv": "^8.9.0",
     "ajv-formats": "^2.1.1",
     "certlogic-html": "^0.2.0",
-    "certlogic-js": "^1.1.1",
+    "certlogic-js": "^1.1.2",
     "dcc-business-rules-utils": "^0.2.0",
     "json-schema": "^0.4.0",
     "react": "^17.0.2",

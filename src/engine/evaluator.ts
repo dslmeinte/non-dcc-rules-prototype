@@ -36,11 +36,13 @@ export const applicableRuleLogic = (sortedRules: Rules, now: Date): RuleLogicMap
 
 
 export const dependenciesOf = (rootExpr: CertLogicExpression): string[] =>   // (exported for unit tests only)
-    treeFlatMap(
-        rootExpr,
-        (expr) =>
-            isResultOf(expr) ? [ expr.resultOf[0] ] : []
-    )
+    [ ...new Set(
+        treeFlatMap(
+            rootExpr,
+            (expr) =>
+                isResultOf(expr) ? [ expr.resultOf[0] ] : []
+        )
+    )].sort()   // make unique/distinct
 
 
 export type ResultsMap = { [ruleId: string]: any }

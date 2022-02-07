@@ -45,7 +45,10 @@ const ResultsTable = ({ results, ruleDependencies }: { results: ResultsMap, rule
 
 
 export const App = () => {
-    const useCase = useCases[0]
+    const params = new URLSearchParams(location.search)
+    const useCaseIndex = params.get("useCase") ? parseInt(params.get("useCase")!, 10): 0
+
+    const useCase = useCases[useCaseIndex]
 
     const now = new Date()
     const exampleData = useCase.exampleDataOn(now)
@@ -163,7 +166,6 @@ export const App = () => {
                         name={false}
                         style={{ fontSize: "12pt" }}
                     />
-                    {/*<pre>{pretty(evaluation)}</pre>*/}
                     <p>
                         This JSON would then be processed further,
                         e.g. to show a message for every rule that evaluated to <span className="tt">false</span>,

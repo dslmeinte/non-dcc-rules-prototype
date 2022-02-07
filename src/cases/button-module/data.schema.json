@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://id.uvci.eu/button-module.schema.json",
+  "title": "Data for NL border checks",
+  "type": "object",
+  "properties": {
+      "buttonColour": {
+        "type": "string",
+        "enum": [
+          "blue",
+          "red",
+          "white",
+          "yellow"
+        ]
+      },
+      "buttonText": {
+        "type": "string",
+        "enum": [
+          "Abort",
+          "Detonate",
+          "Hold"
+        ]
+      },
+      "numberOfBatteries": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "litIndicators": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "stripColour": {
+        "type": "string",
+        "enum": [
+          "blue",
+          "white",
+          "yellow",
+          "???"
+        ]
+      }
+  },
+  "additionalProperties": false,
+  "required": [
+    "buttonColour",
+    "buttonText",
+    "numberOfBatteries",
+    "litIndicators"
+  ]
+}

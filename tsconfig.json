@@ -19,7 +19,8 @@
     "isolatedModules": true,
     "noEmit": false,
     "outDir": "dist",
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "downlevelIteration": true
   },
   "include": [
     "src"

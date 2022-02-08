@@ -46,9 +46,16 @@ const ResultsTable = ({ results, ruleDependencies }: { results: ResultsMap, rule
 
 export const App = () => {
     const params = new URLSearchParams(location.search)
-    const useCaseIndex = params.get("useCase") ? parseInt(params.get("useCase")!, 10): 0
+    const presetUseCaseIndex = params.get("useCase") ? parseInt(params.get("useCase")!, 10): 0
 
-    const useCase = useCases[useCaseIndex]
+    const [useCaseIndex, setUseCaseIndex] = useState(presetUseCaseIndex)
+    let useCase = useCases[useCaseIndex]
+
+    const chooseUseCase = (newUseCaseIndex: number) => {
+        setUseCaseIndex(newUseCaseIndex)
+        useCase = useCases[newUseCaseIndex]
+        window.history.pushState({ useCaseIndex: newUseCaseIndex }, useCase.description, `/?useCase=${newUseCaseIndex}`)
+    }
 
     const now = new Date()
     const exampleData = useCase.exampleDataOn(now)
@@ -83,7 +90,15 @@ export const App = () => {
             <div>
                 <span className="label">Business Rules</span>
                 <p>
-                    Use case: <em>{useCase.description}</em><br/>
+                    Use case:&nbsp;
+                    <select
+                        value={useCaseIndex}
+                        onChange={(event) => { chooseUseCase(parseInt(event.target.value, 10)) }}
+                    >
+                        {useCases.map((useCase, index) =>
+                            <option value={index} key={index}>{useCase.description}</option>
+                        )}
+                    </select>
                 </p>
                 <div className="switch-container">
                     <span>JSON style: <em>fancy</em></span>

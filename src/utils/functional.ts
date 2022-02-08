@@ -26,3 +26,10 @@ export const sortBy = <T, U>(array: T[], keyFn: (t: T) => number): T[] =>
 export const reverse = <T>(array: T[]): T[] =>
     [...array].reverse()
 
+
+/**
+ * Makes an array of strings unique.
+ */
+export const unique = <T extends string>(array: T[]): T[] =>
+    [...new Set(array)]
+

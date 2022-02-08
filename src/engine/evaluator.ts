@@ -2,7 +2,7 @@ import {CertLogicExpression, evaluate} from "certlogic-js"
 
 import {mapOperations, treeFlatMap} from "./tree-mapper"
 import {isResultOf, Rule, Rules, RuleVersion} from "./types"
-import {mapValues, reverse, sortBy} from "../utils/functional"
+import {mapValues, reverse, sortBy, unique} from "../utils/functional"
 import {dependencyOrderOf} from "../utils/topological-sort"
 
 
@@ -36,13 +36,13 @@ export const applicableRuleLogic = (sortedRules: Rules, now: Date): RuleLogicMap
 
 
 export const dependenciesOf = (rootExpr: CertLogicExpression): string[] =>   // (exported for unit tests only)
-    [ ...new Set(
+    unique(
         treeFlatMap(
             rootExpr,
             (expr) =>
                 isResultOf(expr) ? [ expr.resultOf[0] ] : []
         )
-    )].sort()   // make unique/distinct
+    ).sort()
 
 
 export type ResultsMap = { [ruleId: string]: any }

@@ -5,11 +5,11 @@ import ReactJson from "react-json-view"
 import {pretty, tryParse} from "../utils/json"
 import {
     evaluateRules, prepareEvaluation,
-    ResultsMap,
     RuleDependencies
 } from "../engine/evaluator"
 import {createSchemaValidator} from "../utils/schema-validator"
 import useCases from "../cases/use-cases"
+import {ResultsMap} from "../engine/resultOf-utils"
 
 
 const ReactiveTextArea = ({ id, value, setter }: { id: string, value: string, setter: (newValue: string) => void }) =>
@@ -70,7 +70,7 @@ export const App = () => {
         : []
     const [ _, ruleDependencies, dependencyOrder ] = prepareEvaluation(useCase.rules, now)
     const rulesAreEvaluatable = dependencyOrder !== false
-    const evaluation = dataIsValid && rulesAreEvaluatable && evaluateRules(useCase.rules, data, now)
+    const evaluation = dataIsValid && rulesAreEvaluatable && evaluateRules(useCase.rules, now, data)
 
     const [plainJson, setPlainJson] = useState(false)
 

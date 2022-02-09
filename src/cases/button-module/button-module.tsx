@@ -156,7 +156,7 @@ const useCase: UseCase = {
             }
         ]
     },
-    exampleDataOn: (now) => ({
+    exampleDataOn: (_) => ({
         buttonColour: "blue",
         buttonText: "Abort",
         numberOfBatteries: 4,

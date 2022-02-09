@@ -25,7 +25,7 @@ export const resultOf_ = (ruleId: string): CertLogicExpression =>
 export type Rules = {
     id: string
     description?: string
-    rules: Rule[]
+    rules: Rule[]   // a bit confusing: Rules.rules...leave for now...
     // dataSchema: JSONSchema7  <== use convention: data.schema.json next to rules.json
     // reference data?
 }

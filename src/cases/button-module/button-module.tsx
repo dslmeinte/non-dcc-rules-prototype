@@ -154,7 +154,8 @@ const useCase: UseCase = {
                     }
                 ]
             }
-        ]
+        ],
+        referenceDataSlots: []
     },
     exampleDataOn: (_) => ({
         buttonColour: "blue",

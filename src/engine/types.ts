@@ -22,12 +22,18 @@ export const resultOf_ = (ruleId: string): CertLogicExpression =>
     ({ resultOf: [ruleId] }) as any as CertLogicExpression
 
 
+export type ReferenceDataSlot = {
+    path: string
+    value: any
+    // TODO  version values
+}
+
 export type Rules = {
     id: string
     description?: string
     rules: Rule[]   // a bit confusing: Rules.rules...leave for now...
+    referenceDataSlots: ReferenceDataSlot[]
     // dataSchema: JSONSchema7  <== use convention: data.schema.json next to rules.json
-    // reference data?
 }
 
 export type Rule = {

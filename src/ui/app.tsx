@@ -3,9 +3,10 @@ import ReactJson from "react-json-view"
 
 import {pretty, tryParse} from "../utils/json"
 import {evaluateRules, Evaluation, RuleEvaluation} from "../engine/evaluator"
+import {insertReferenceData} from "../engine/reference-data"
+import {asResultsMap, renderAsCompactText} from "../engine/resultOf-utils"
 import {createSchemaValidator} from "../utils/schema-validator"
 import useCases from "../cases/use-cases"
-import {asResultsMap, renderAsCompactText} from "../engine/resultOf-utils"
 
 
 const ReactiveTextArea = ({ id, value, setter }: { id: string, value: string, setter: (newValue: string) => void }) =>
@@ -46,7 +47,8 @@ const ResultsTable = ({ evaluation }: { evaluation: Evaluation & object }) =>
 export const App = () => {
     const params = new URLSearchParams(location.search)
     const useCaseIndex = params.get("useCase") ? parseInt(params.get("useCase")!, 10): 0
-    let useCase = useCases[useCaseIndex]
+    const useCase = useCases[useCaseIndex]
+    const { rules } = useCase
 
     const now = new Date()
     const exampleData = useCase.exampleDataOn(now)
@@ -59,8 +61,11 @@ export const App = () => {
     const validationErrorMessages = dataIsValid
         ? dataValidator(data).filter((error) => error.message !== undefined).map((error) => `/${error.instancePath} ${error.message!}.`)
         : []
-    const evaluation = dataIsValid && evaluateRules(useCase.rules, now, data)
+    const evaluation = dataIsValid && evaluateRules(rules, now, data)
     const rulesAreEvaluatable = evaluation !== false
+
+    const hasReferenceData = rules.referenceDataSlots.length > 0
+    const referenceData = insertReferenceData({}, rules.referenceDataSlots)
 
     const [plainJson, setPlainJson] = useState(false)
 
@@ -95,9 +100,9 @@ export const App = () => {
                     <span><em>plain</em></span>
                 </div>
                 {plainJson
-                    ? <pre>{pretty(useCase.rules)}</pre>
+                    ? <pre>{pretty(rules)}</pre>
                     : <ReactJson
-                        src={useCase.rules}
+                        src={rules}
                         name={false}
                         style={{ fontSize: "9pt" }}
                         iconStyle={"square"}
@@ -147,6 +152,8 @@ export const App = () => {
                 <p>
                     You can edit the Input Data freely: it will be validated and immediately, and the Result of the evaluation will be updated automatically as well.
                 </p>
+                <p>
+                </p>
             </div>
             <div>
                 <span className="label">Validation</span>
@@ -162,6 +169,35 @@ export const App = () => {
                     : <p className="red">Could not parse data text as JSON: <span className="tt">{data.message}</span>.</p>
                 }
             </div>
+
+            <div>
+                <span className="label">Reference Data</span>
+                {hasReferenceData
+                    ? <div>
+                        <p>
+                            The following reference data is added to the Input Data, right before evaluation.
+                        </p>
+                        <ReactJson
+                            src={referenceData}
+                            name={false}
+                            style={{fontSize: "12pt"}}
+                            collapsed={2 /* TODO  make dependent on nesting depth / min(#fragments of all ref data slot paths) */}
+                        />
+                    </div>
+                    : <p>
+                        The rules of this use case don't specify any reference data.
+                    </p>
+                }
+            </div>
+            <div>
+                <span className="label">Explanation</span>
+                <p>
+                    For many use cases, it's useful to be able to inspect reference data from the business rules' logical expressions.
+                    This helps to avoid “hard-coding” values in those expressions.
+                    A set of rules can specify <em>slots</em> of reference data, consisting of a value (JSON), and a path at which that value is inserted into the Input Data.
+                </p>
+            </div>
+
             <div>
                 <span className="label">Result</span>
                 {!dataIsValid && <p>(Did not run evaluation because the Input Data didn't validate.)</p>}

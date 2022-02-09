@@ -1,9 +1,10 @@
 /**
- * Compute the dependency order of the given `things`, computing dependencies with the given `dependenciesFunction`.
+ * Put the given `things` into dependency order.
+ * Dependencies are computed with the given `dependenciesFunction`.
  * @returns An array of the same things (assuming the things is its own transitive closure of the dependencies),
  *  but in dependency order, or false when there's a cycle.
  */
-export const dependencyOrderOf = <T>(things: T[], dependenciesFunction: (t: T) => T[]): T[] | false => {
+export const inDependencyOrder = <T>(things: T[], dependenciesFunction: (t: T) => T[]): T[] | false => {
     const ordered: T[] = []
 
     const visit = (current: T, chain: T[]) => {

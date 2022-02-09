@@ -1,8 +1,9 @@
 import {evaluate} from "certlogic-js"
 
 import {Rule, Rules} from "./types"
+import {insertReferenceData} from "./reference-data"
 import {dependenciesOf, replaceWithResults, ResultsMap} from "./resultOf-utils"
-import {dependencyOrderOf} from "../utils/topological-sort"
+import {inDependencyOrder} from "../utils/topological-sort"
 
 
 export type RuleEvaluation = {
@@ -65,10 +66,19 @@ export const evaluateRules = (rules: Rules, now: Date, data: any): Evaluation =>
             [ ruleEval.rule.id, ruleEval ]
         )
     )
-    const evaluation = dependencyOrderOf(ruleEvals, (ruleEval) => ruleEval.dependencies.map((ruleId) => id2RuleEval[ruleId]))
+    const evaluation = inDependencyOrder(ruleEvals, (ruleEval) => ruleEval.dependencies.map((ruleId) => id2RuleEval[ruleId]))
     if (evaluation === false) {
         return false
     }
+    /*
+     * Alternatively, something like:...
+        const dependencyOrder = inDependencyOrder(Object.keys(id2RuleEval), (ruleId) => id2RuleEval[ruleId].dependencies)
+        if (dependencyOrder === false) {
+            return false
+        }
+     */
+
+    insertReferenceData(data, rules.referenceDataSlots)
     const resultsMap = evaluation
         .reduce((resultsMap: ResultsMap, { rule, indexOfApplicableVersion }) =>
                 ({

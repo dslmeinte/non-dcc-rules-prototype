@@ -16,6 +16,9 @@ const deNL = (ruleID: string) => {
 }
 
 
+const countryCodePath = "external.countryCode"
+const refDataSlotPath = "valueSets.EU-MemberStates"
+
 const convertedRules: Rules = {
     id: "custom business rules for NL border control",
     rules: [
@@ -38,7 +41,7 @@ const convertedRules: Rules = {
                     logic: if_(
                         binOp_(
                             "in",
-                            var_("external.countryCode"),
+                            var_(countryCodePath),
                             [ "US" ]
                         ),
                         "yellow",
@@ -54,8 +57,8 @@ const convertedRules: Rules = {
                     validFrom: "2021-01-01",
                     logic: binOp_(
                         "in",
-                        var_("external.countryCode"),
-                        [ "AT", "BE", "BG", "CY", "CZ", "DE", "DK", "EE", "ES", "FI", "FR", "GR", "HU", "HR", "IE", "IT", "LT", "LU", "LV", "MT", "NL", "PL", "PT", "RO", "SE", "SI", "SK" ]
+                        var_(countryCodePath),
+                        var_(refDataSlotPath)
                     )
                 }
             ]
@@ -76,6 +79,12 @@ const convertedRules: Rules = {
                 ],
                 description: rule.Description.find((desc) => desc.lang === "en")!.desc,
             }))
+    ],
+    referenceDataSlots: [
+        {
+            path: refDataSlotPath,
+            value: [ "AT", "BE", "BG", "CY", "CZ", "DE", "DK", "EE", "ES", "FI", "FR", "GR", "HU", "HR", "IE", "IT", "LT", "LU", "LV", "MT", "NL", "PL", "PT", "RO", "SE", "SI", "SK" ]
+        }
     ]
 }
 

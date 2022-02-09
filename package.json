@@ -6,7 +6,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "unit-test": "tsc && mocha dist/test --recursive"
+    "unit-test": "tsc && mocha dist/test --recursive",
+    "build-uc0": "tsc && node dist/cases/NL-border-customs/persist-migrated-rules.js"
   },
   "browserslist": [
     ">0.2%",

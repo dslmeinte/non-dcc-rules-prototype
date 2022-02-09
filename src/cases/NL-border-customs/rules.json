@@ -92,35 +92,9 @@
               {
                 "var": "external.countryCode"
               },
-              [
-                "AT",
-                "BE",
-                "BG",
-                "CY",
-                "CZ",
-                "DE",
-                "DK",
-                "EE",
-                "ES",
-                "FI",
-                "FR",
-                "GR",
-                "HU",
-                "HR",
-                "IE",
-                "IT",
-                "LT",
-                "LU",
-                "LV",
-                "MT",
-                "NL",
-                "PL",
-                "PT",
-                "RO",
-                "SE",
-                "SI",
-                "SK"
-              ]
+              {
+                "var": "valueSets.EU-MemberStates"
+              }
             ]
           }
         }
@@ -653,6 +627,40 @@
         }
       ],
       "description": "DCC is valid however travelling to The Netherlands from a country outside the EU/Schengen with yellow or orange colorcode requires a valid negative test result."
+    }
+  ],
+  "referenceDataSlots": [
+    {
+      "path": "valueSets.EU-MemberStates",
+      "value": [
+        "AT",
+        "BE",
+        "BG",
+        "CY",
+        "CZ",
+        "DE",
+        "DK",
+        "EE",
+        "ES",
+        "FI",
+        "FR",
+        "GR",
+        "HU",
+        "HR",
+        "IE",
+        "IT",
+        "LT",
+        "LU",
+        "LV",
+        "MT",
+        "NL",
+        "PL",
+        "PT",
+        "RO",
+        "SE",
+        "SI",
+        "SK"
+      ]
     }
   ]
 }

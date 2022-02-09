@@ -9,12 +9,12 @@
 * &#10003; Show compact notation of each rule's `logic` &lArr; requires some restructuring of the result.
 * &#10003; Show figure lower (and smaller).
 * &#10003; Fix switching not working: just redirect completely (for now).
+* &#10003; Implement reference data inclusion (“value sets”).
+    * &#10003; Use that to encode what countries are EU MS in NL custom border rules use case.
 * Describe how to use the framework for a number of use cases (with Vincent). E.g.:
     * Verifier app.
     * Entry portal, with interactive questionnaires.
 * Gather Passenger Locator Forms of ~6 EU MS (BE, FR, DE, IT), and analyse ~3-4 of these.
-* Implement reference data inclusion (“value sets”).
-    * Use that to encode what countries are EU MS in NL custom border rules use case.
 * Add more structure to result, e.g., meta data, rule evaluations.
 * Publish JSON schemas (somehow).
 * Validate all schemas as JSON schemas.

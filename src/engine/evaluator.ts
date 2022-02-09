@@ -28,6 +28,11 @@ export type RuleEvaluation = {
 export type Evaluation = false | RuleEvaluation[]
 
 
+/**
+ * Computes the the version of the given {@link Rule} applicable on the given `now` time,
+ * as the index in the array of the rule's versions.
+ * If no version is applicable, then a value of -1 is returned.
+ */
 const indexOfApplicableVersion = ({ validTo, versions }: Rule, now: Date): number =>
     (validTo !== undefined && new Date(validTo) < now)
         ? -1
@@ -38,43 +43,43 @@ const indexOfApplicableVersion = ({ validTo, versions }: Rule, now: Date): numbe
         )
 
 export const evaluateRules = (rules: Rules, now: Date, data: any): Evaluation => {
-    const step1 = rules.rules.map((rule) =>
-        ({
-            rule,
-            indexOfApplicableVersion: indexOfApplicableVersion(rule, now)
-        })
-    )
-    const step2 = step1
-        .filter(({ indexOfApplicableVersion }) => indexOfApplicableVersion > -1)
-    const step3 = step2
-        .map((obj2) =>
+    const ruleEvals = rules.rules.map((rule) =>                        // compute (index of) applicable version for all rules
             ({
-                ...obj2,
-                dependencies: dependenciesOf(obj2.rule.versions[obj2.indexOfApplicableVersion].logic),
-                result: undefined
+                rule,
+                indexOfApplicableVersion: indexOfApplicableVersion(rule, now)
             })
         )
-    const perId = Object.fromEntries(
-        step3.map((obj3) =>
-            [ obj3.rule.id, obj3 ]
+        .filter(({indexOfApplicableVersion}) =>                     // filter out rules without applicable version
+            indexOfApplicableVersion > -1
+        )
+        .map(({ rule, indexOfApplicableVersion }) =>          // create a RuleEvaluation instance for each applicable rule's version
+            ({
+                rule,
+                indexOfApplicableVersion,
+                dependencies: dependenciesOf(rule.versions[indexOfApplicableVersion].logic),
+                result: undefined   // set `result` to undefined for the moment
+            })
+        )
+    const id2RuleEval = Object.fromEntries(
+        ruleEvals.map((ruleEval) =>
+            [ ruleEval.rule.id, ruleEval ]
         )
     )
-    const step4 = dependencyOrderOf(step3, (obj3) => obj3.dependencies.map((ruleId) => perId[ruleId]))
-    if (step4 === false) {
+    const evaluation = dependencyOrderOf(ruleEvals, (ruleEval) => ruleEval.dependencies.map((ruleId) => id2RuleEval[ruleId]))
+    if (evaluation === false) {
         return false
     }
-    const resultsMap = step4
-        .reduce((resultsMap: ResultsMap, obj4) =>
+    const resultsMap = evaluation
+        .reduce((resultsMap: ResultsMap, { rule, indexOfApplicableVersion }) =>
                 ({
                     ...resultsMap,
-                    [obj4.rule.id]: evaluate(replaceWithResults(obj4.rule.versions[obj4.indexOfApplicableVersion].logic, resultsMap), data)
+                    [rule.id]: evaluate(replaceWithResults(rule.versions[indexOfApplicableVersion].logic, resultsMap), data)
                 }),
             {}
         )
-    // ...
-    step4.forEach((obj4) => {
-        obj4.result = resultsMap[obj4.rule.id]
+    evaluation.forEach((ruleEval) => {
+        ruleEval.result = resultsMap[ruleEval.rule.id]  // set `result` to actual result
     })
-    return step4
+    return evaluation
 }
 

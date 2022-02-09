@@ -33,8 +33,8 @@ export function treeFlatMap<T>(rootExpr: CertLogicExpression, mapper: (expr: Cer
 
 export function mapOperations(
             rootExpr: CertLogicExpression,
-            replaceFn: (expr: CertLogicOperation, operator: string, values: any) => boolean,
-            replacerFn: (expr: CertLogicOperation, operator: string, values: any) => CertLogicExpression
+            replaceFn: (operator: string, values: any) => boolean,
+            replacerFn: (operator: string, values: any) => CertLogicExpression
         ): CertLogicExpression {
     const map_ = (expr: CertLogicExpression): CertLogicExpression => {
         if (typeof expr === "string" || isInt(expr) || typeof expr === "boolean") {
@@ -45,8 +45,8 @@ export function mapOperations(
         }
         if (typeof expr === "object") {
             const [ operator, values ] = Object.entries(expr)[0]
-            if (replaceFn(expr, operator, values)) {
-                return replacerFn(expr, operator, values)
+            if (replaceFn(operator, values)) {
+                return replacerFn(operator, values)
             }
             return operator === "var"
                 ? expr

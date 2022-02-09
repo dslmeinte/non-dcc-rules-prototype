@@ -20,8 +20,8 @@ export type ResultsMap = { [ruleId: string]: any }
 export const replaceWithResults = (rootExpr: CertLogicExpression, resultsMap: ResultsMap): CertLogicExpression =>
     mapOperations(
         rootExpr,
-        (_, operator) => operator === "resultOf",
-        (_1, _2, values) => resultsMap[values[0]] as CertLogicExpression
+        ( operator, _) => operator === "resultOf",
+        (_, values) => resultsMap[values[0]] as CertLogicExpression
     )
 
 

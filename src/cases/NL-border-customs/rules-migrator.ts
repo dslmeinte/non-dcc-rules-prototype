@@ -69,8 +69,8 @@ const convertedRules: Rules = {
                         validFrom: rule.ValidFrom,
                         logic: mapOperations(
                             rule.Logic,
-                            (_, operator, values) => operator === "var" && (values === "payload.from.color" || values === "payload.from.is_EU"),
-                            (_1, _2, values) => resultOf_(values.substring(values.lastIndexOf(".") + 1))
+                            (operator, values) => operator === "var" && (values === "payload.from.color" || values === "payload.from.is_EU"),
+                            (_, values) => resultOf_(values.substring(values.lastIndexOf(".") + 1))
                         )
                     }
                 ],

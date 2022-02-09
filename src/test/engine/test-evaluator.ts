@@ -1,37 +1,26 @@
-const {deepEqual, equal} = require("chai").assert
+const {deepEqual, equal, isNotFalse} = require("chai").assert
 
-import {applicableRuleLogic, evaluateRules, sortVersionsByValidFrom} from "../../engine/evaluator"
+import {evaluateRules} from "../../engine/evaluator"
+import {asResultsMap} from "../../engine/resultOf-utils"
 import testRules from "./test-rules"
-
-
-describe("helper functions", () => {
-
-    it("sortVersionsByValidFrom works", () => {
-        const sorted = sortVersionsByValidFrom(testRules)
-        equal(sorted.rules[0].versions[0].validFrom, "2022-02-01")
-    })
-
-    it("applicableRuleVersions", () => {
-        const sorted = sortVersionsByValidFrom(testRules)
-        const rulesLogicMap = applicableRuleLogic(sorted, new Date("2022-01-01"))
-        equal(rulesLogicMap["rule0"], true)
-    })
-
-})
 
 
 describe("evaluateRules", () => {
 
     it("works on test rules", () => {
+        const result1 = evaluateRules(testRules, new Date("2022-01-01"), { q: "bar" })
+        isNotFalse(result1)
         deepEqual(
-            evaluateRules(testRules, new Date("2022-01-01"), { q: "bar" }),
+            asResultsMap(result1),
             {
                 rule0: true,
                 rule1: "bar"
             }
         )
+        const result2 = evaluateRules(testRules, new Date("2022-03-01"), { q: "bar" })
+        isNotFalse(result2)
         deepEqual(
-            evaluateRules(testRules, new Date("2022-03-01"), { q: "bar" }),
+            asResultsMap(result2),
             {
                 rule0: false,
                 rule1: false
@@ -44,7 +33,7 @@ describe("evaluateRules", () => {
         const now = new Date()
         const data = require("../../../src/cases/NL-border-customs/example-data.json")
         data.external.validationClock = now.toISOString()
-        const result = evaluateRules(rules, now, data)
+        const result = asResultsMap(evaluateRules(rules, now, data))
         equal(result["CR-combined"], false)
     })
 

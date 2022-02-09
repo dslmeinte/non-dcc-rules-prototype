@@ -4,7 +4,7 @@ import {dependenciesOf, replaceWithResults} from "../../engine/resultOf-utils"
 import testRules from "./test-rules"
 
 
-describe("helper functions", () => {
+describe("resultOf util functions", () => {
 
     it("dependenciesOf", () => {
         deepEqual(

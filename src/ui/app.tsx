@@ -3,13 +3,10 @@ import {useState} from "react"
 import ReactJson from "react-json-view"
 
 import {pretty, tryParse} from "../utils/json"
-import {
-    evaluateRules, prepareEvaluation,
-    RuleDependencies
-} from "../engine/evaluator"
+import {evaluateRules, Evaluation} from "../engine/evaluator"
 import {createSchemaValidator} from "../utils/schema-validator"
 import useCases from "../cases/use-cases"
-import {ResultsMap} from "../engine/resultOf-utils"
+import {asResultsMap} from "../engine/resultOf-utils";
 
 
 const ReactiveTextArea = ({ id, value, setter }: { id: string, value: string, setter: (newValue: string) => void }) =>
@@ -19,7 +16,7 @@ const ReactiveTextArea = ({ id, value, setter }: { id: string, value: string, se
         value={value} />
 
 
-const ResultsTable = ({ results, ruleDependencies }: { results: ResultsMap, ruleDependencies: RuleDependencies }) =>
+const ResultsTable = ({ evaluation }: { evaluation: Evaluation & object }) =>
     <table>
         <thead>
             <tr>
@@ -29,17 +26,15 @@ const ResultsTable = ({ results, ruleDependencies }: { results: ResultsMap, rule
             </tr>
         </thead>
         <tbody>
-        {Object.entries(results)
-            .map(([ ruleId, result ], index) =>
-                <tr key={index}>
-                    <td className="ID">{ruleId}</td>
-                    <td className="tt">{pretty(result)}</td>
-                    <td style={{ fontSize: "9pt" }}>{ruleDependencies[ruleId].map((depRuleId, index) =>
-                        <span className="ID" key={index}>{depRuleId}&nbsp; </span>
-                    )}</td>
-                </tr>
-            )
-        }
+        {evaluation.map((ruleEval, index) =>
+            <tr key={index}>
+                <td className="ID">{ruleEval.rule.id}</td>
+                <td className="tt">{pretty(ruleEval.result)}</td>
+                <td style={{ fontSize: "9pt" }}>{ruleEval.dependencies.map((depRuleId, index) =>
+                    <span className="ID" key={index}>{depRuleId}&nbsp; </span>
+                )}</td>
+            </tr>
+        )}
         </tbody>
     </table>
 
@@ -68,9 +63,8 @@ export const App = () => {
     const validationErrorMessages = dataIsValid
         ? dataValidator(data).filter((error) => error.message !== undefined).map((error) => `/${error.instancePath} ${error.message!}.`)
         : []
-    const [ _, ruleDependencies, dependencyOrder ] = prepareEvaluation(useCase.rules, now)
-    const rulesAreEvaluatable = dependencyOrder !== false
-    const evaluation = dataIsValid && rulesAreEvaluatable && evaluateRules(useCase.rules, now, data)
+    const evaluation = dataIsValid && evaluateRules(useCase.rules, now, data)
+    const rulesAreEvaluatable = evaluation !== false
 
     const [plainJson, setPlainJson] = useState(false)
 
@@ -182,7 +176,7 @@ export const App = () => {
                     The result of the evaluation of the Business Rules against the Input Data above is as follows in tabular form:
                 </p>
                 {!dataIsValid && <p>(Did not run evaluation because input data didn't validate.)</p>}
-                {dataIsValid && rulesAreEvaluatable && <ResultsTable results={evaluation as ResultsMap} ruleDependencies={ruleDependencies} />}
+                {dataIsValid && rulesAreEvaluatable && <ResultsTable evaluation={evaluation} />}
             </div>
             {dataIsValid && rulesAreEvaluatable &&
                 <div>
@@ -190,7 +184,7 @@ export const App = () => {
                         In JSON format it would be:
                     </p>
                     <ReactJson
-                        src={evaluation as object}
+                        src={asResultsMap(evaluation)}
                         name={false}
                         style={{ fontSize: "12pt" }}
                     />

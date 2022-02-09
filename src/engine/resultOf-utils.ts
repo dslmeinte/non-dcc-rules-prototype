@@ -1,6 +1,7 @@
 import {CertLogicExpression} from "certlogic-js"
 
 import {unique} from "../utils/functional"
+import {Evaluation} from "./evaluator"
 import {mapOperations, treeFlatMap} from "./tree-mapper"
 import {isResultOf} from "./types"
 
@@ -22,4 +23,14 @@ export const replaceWithResults = (rootExpr: CertLogicExpression, resultsMap: Re
         (_, operator) => operator === "resultOf",
         (_1, _2, values) => resultsMap[values[0]] as CertLogicExpression
     )
+
+
+export const asResultsMap = (evaluation: Evaluation): ResultsMap =>
+    evaluation === false
+        ? {}
+        : Object.fromEntries(
+            evaluation.map(({ rule, result }) =>
+                [ rule.id, result ]
+            )
+        )
 

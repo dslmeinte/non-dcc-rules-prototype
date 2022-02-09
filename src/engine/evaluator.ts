@@ -5,7 +5,7 @@ import {dependenciesOf, replaceWithResults, ResultsMap} from "./resultOf-utils"
 import {dependencyOrderOf} from "../utils/topological-sort"
 
 
-export type RuleVersionEvaluation = {
+export type RuleEvaluation = {
     rule: Rule
     /**
      * The index of the applicable version of the `rule`.
@@ -23,9 +23,9 @@ export type RuleVersionEvaluation = {
 
 /**
  * Either `false`, which corresponds to the dependency graph being cyclic,
- * or an array of {@link RuleVersionEvaluation} objects, in dependency order.
+ * or an array of {@link RuleEvaluation} objects, in dependency order.
  */
-export type Evaluation = false | RuleVersionEvaluation[]
+export type Evaluation = false | RuleEvaluation[]
 
 
 const indexOfApplicableVersion = ({ validTo, versions }: Rule, now: Date): number =>

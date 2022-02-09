@@ -1,12 +1,11 @@
-import React from "react"
-import {useState} from "react"
+import React, {useState} from "react"
 import ReactJson from "react-json-view"
 
 import {pretty, tryParse} from "../utils/json"
-import {evaluateRules, Evaluation} from "../engine/evaluator"
+import {evaluateRules, Evaluation, RuleEvaluation} from "../engine/evaluator"
 import {createSchemaValidator} from "../utils/schema-validator"
 import useCases from "../cases/use-cases"
-import {asResultsMap} from "../engine/resultOf-utils";
+import {asResultsMap, renderAsCompactText} from "../engine/resultOf-utils"
 
 
 const ReactiveTextArea = ({ id, value, setter }: { id: string, value: string, setter: (newValue: string) => void }) =>
@@ -15,6 +14,11 @@ const ReactiveTextArea = ({ id, value, setter }: { id: string, value: string, se
         onChange={(event) => setter(event.target.value)}
         value={value} />
 
+
+const explanationFor = ({ rule, indexOfApplicableVersion }: RuleEvaluation): string =>
+    `logic: ${renderAsCompactText(rule.versions[indexOfApplicableVersion].logic)}
+index of applicable version: ${indexOfApplicableVersion}
+`
 
 const ResultsTable = ({ evaluation }: { evaluation: Evaluation & object }) =>
     <table>
@@ -28,7 +32,7 @@ const ResultsTable = ({ evaluation }: { evaluation: Evaluation & object }) =>
         <tbody>
         {evaluation.map((ruleEval, index) =>
             <tr key={index}>
-                <td className="ID">{ruleEval.rule.id}</td>
+                <td className="ID"><span title={explanationFor(ruleEval)}>{ruleEval.rule.id}</span></td>
                 <td className="tt">{pretty(ruleEval.result)}</td>
                 <td style={{ fontSize: "9pt" }}>{ruleEval.dependencies.map((depRuleId, index) =>
                     <span className="ID" key={index}>{depRuleId}&nbsp; </span>
@@ -41,16 +45,8 @@ const ResultsTable = ({ evaluation }: { evaluation: Evaluation & object }) =>
 
 export const App = () => {
     const params = new URLSearchParams(location.search)
-    const presetUseCaseIndex = params.get("useCase") ? parseInt(params.get("useCase")!, 10): 0
-
-    const [useCaseIndex, setUseCaseIndex] = useState(presetUseCaseIndex)
+    const useCaseIndex = params.get("useCase") ? parseInt(params.get("useCase")!, 10): 0
     let useCase = useCases[useCaseIndex]
-
-    const chooseUseCase = (newUseCaseIndex: number) => {
-        setUseCaseIndex(newUseCaseIndex)
-        useCase = useCases[newUseCaseIndex]
-        window.history.pushState({ useCaseIndex: newUseCaseIndex }, useCase.description, `/?useCase=${newUseCaseIndex}`)
-    }
 
     const now = new Date()
     const exampleData = useCase.exampleDataOn(now)
@@ -73,13 +69,8 @@ export const App = () => {
         <p>
             This mini-app is a tech demo for the <a href="https://webgate.ec.europa.eu/fpfis/wikis/display/eHN/Draft+proposal%3A+Non-DCC+business+rules" target="_blank">non-DCC business rules proposal</a><sup>*</sup> currently being drafted by the Taskforce Business Rules of the eHN.
             &nbsp;&nbsp;<small>*) Requires access to EU Confluence.</small>
+            See also <a href="#architecture">the architecture section</a> below.
         </p>
-        <p>
-            The following figure explains things succinctly.
-        </p>
-        <div className="centered">
-            <img src="engine.svg" width={800} alt="engine framework" />
-        </div>
         <div className="wrapper">
             <div>
                 <span className="label">Business Rules</span>
@@ -87,7 +78,8 @@ export const App = () => {
                     Use case:&nbsp;
                     <select
                         value={useCaseIndex}
-                        onChange={(event) => { chooseUseCase(parseInt(event.target.value, 10)) }}
+                        onChange={(event) => {
+                            location.href = `${location.pathname}?useCase=${(parseInt(event.target.value, 10))}` }}
                     >
                         {useCases.map((useCase, index) =>
                             <option value={index} key={index}>{useCase.description}</option>
@@ -172,11 +164,18 @@ export const App = () => {
             </div>
             <div>
                 <span className="label">Result</span>
-                <p>
-                    The result of the evaluation of the Business Rules against the Input Data above is as follows in tabular form:
-                </p>
-                {!dataIsValid && <p>(Did not run evaluation because input data didn't validate.)</p>}
-                {dataIsValid && rulesAreEvaluatable && <ResultsTable evaluation={evaluation} />}
+                {!dataIsValid && <p>(Did not run evaluation because the Input Data didn't validate.)</p>}
+                {!rulesAreEvaluatable && <p>(Did not run evaluation because the Business Rules have a cyclic dependency.)</p>}
+                {dataIsValid && rulesAreEvaluatable && <div>
+                    <p>
+                        The result of the evaluation of the Business Rules against the Input Data above is as follows in tabular form:
+                    </p>
+                    <ResultsTable evaluation={evaluation} />
+                    <p>
+                        Hover over a rule ID in the first column to see a compact, textual rendering of the CertLogic expression of the applicable version for the rule with that rule ID.
+                        The syntax “<span className="tt">@("<em>&lt;rule ID&gt;</em>")</span>” means “result of rule with ID <em>&lt;rule ID&gt;</em>”.
+                    </p>
+                </div>}
             </div>
             {dataIsValid && rulesAreEvaluatable &&
                 <div>
@@ -198,6 +197,13 @@ export const App = () => {
                     </p>
                 </div>
             }
+        </div>
+        <h2 id="architecture">Architecture</h2>
+        <p>
+            The following figure explains things succinctly.
+        </p>
+        <div className="centered">
+            <img src="engine.svg" width={600} alt="engine framework" />
         </div>
         <h2>Attribution</h2>
         <p>

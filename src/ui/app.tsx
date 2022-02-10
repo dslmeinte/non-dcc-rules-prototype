@@ -238,7 +238,7 @@ export const App = () => {
         <p>
             The following figure explains things succinctly.
         </p>
-        <div className="centered">
+        <div>
             <img src="engine.svg" width={600} alt="engine framework" />
         </div>
         <h2>Attribution</h2>

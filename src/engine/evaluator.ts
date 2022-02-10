@@ -30,7 +30,7 @@ export type Evaluation = false | RuleEvaluation[]
 
 
 /**
- * Computes the the version of the given {@link Rule} applicable on the given `now` time,
+ * Computes the version of the given {@link Rule} applicable on the given `now` time,
  * as the index in the array of the rule's versions.
  * If no version is applicable, then a value of -1 is returned.
  */

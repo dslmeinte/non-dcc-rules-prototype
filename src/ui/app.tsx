@@ -25,7 +25,7 @@ const ResultsTable = ({ evaluation }: { evaluation: Evaluation & object }) =>
     <table>
         <thead>
             <tr>
-                <th style={{ width: "8em" }}>rule ID</th>
+                <th style={{ width: "10em" }}>rule ID</th>
                 <th>result</th>
                 <th>dependencies</th>
             </tr>
@@ -34,7 +34,7 @@ const ResultsTable = ({ evaluation }: { evaluation: Evaluation & object }) =>
         {evaluation.map((ruleEval, index) =>
             <tr key={index}>
                 <td className="ID"><span title={explanationFor(ruleEval)}>{ruleEval.rule.id}</span></td>
-                <td className="tt">{pretty(ruleEval.result)}</td>
+                <td className="tt">{`${ruleEval.result}`}</td>
                 <td style={{ fontSize: "9pt" }}>{ruleEval.dependencies.map((depRuleId, index) =>
                     <span className="ID" key={index}>{depRuleId}&nbsp; </span>
                 )}</td>

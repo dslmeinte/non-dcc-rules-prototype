@@ -28,6 +28,5 @@ yarn-error.log*
 .env.build
 .vercel
 
-# IntelliJ/IDEA:
-/.idea
+/tmp/
 

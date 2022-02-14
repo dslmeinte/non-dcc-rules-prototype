@@ -1,0 +1,21 @@
+{
+  "non-DCC-data": {
+    "Belgian resident": true,
+    "citizen of Third Country": false,
+    "origin of travel": "Green Zone"
+  },
+  "payload": {
+    "dob": "1977-05-04",
+    "v": [
+      {
+        "mp": "EU/1/20/1525",
+        "dt": "2022-02-01",
+        "dn": 3,
+        "sd": 3
+      }
+    ]
+  },
+  "external": {
+    "validationClock": "???"
+  }
+}

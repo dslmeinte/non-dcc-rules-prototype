@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://id.uvci.eu/BE/data.schema.json",
+  "title": "Input Data spec. for BE border checks",
+  "type": "object",
+  "properties": {
+    "payload": {
+      "type": "object"
+    },
+    "non-DCC-data": {
+      "type": "object",
+      "properties": {
+        "Belgian resident": {
+          "type": "boolean"
+        },
+        "citizen of Third Country": {
+          "type": "boolean"
+        },
+        "origin of travel": {
+          "type": "string",
+          "enum": [
+            "Green Zone",
+            "Orange Zone",
+            "Red Zone",
+            "VOC Zone",
+            "Third Country"
+          ]
+        },
+        "travel is essential": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "Belgian resident",
+        "citizen of Third Country",
+        "origin of travel"
+      ],
+      "additionalProperties": false
+    },
+    "external": {
+      "type": "object",
+      "properties": {
+        "validationClock": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "validationClock"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "non-DCC-data"
+  ]
+}

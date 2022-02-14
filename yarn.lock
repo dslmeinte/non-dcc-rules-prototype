@@ -2147,7 +2147,7 @@
     "json-schema-traverse" "^0.4.1"
     "uri-js" "^4.2.2"
 
-"ajv@^6.9.1", "ajv@^8.0.0", "ajv@^8.6.0", "ajv@^8.8.0", "ajv@^8.8.2", "ajv@^8.9.0", "ajv@>=8":
+"ajv@^6.9.1", "ajv@^8.0.0", "ajv@^8.10.0", "ajv@^8.6.0", "ajv@^8.8.0", "ajv@^8.8.2", "ajv@^8.9.0", "ajv@>=8":
   "integrity" "sha512-bzqAEZOjkrUMl2afH8dknrq5KEk2SrwdBROR+vH1EKVQTqaUbJVPdc/gEdggTMM0Se+s+Ja4ju4TlNcStKl2Hw=="
   "resolved" "https://registry.npmjs.org/ajv/-/ajv-8.10.0.tgz"
   "version" "8.10.0"
@@ -2700,7 +2700,7 @@
     "react" "^17.0.2"
     "react-dom" "^17.0.2"
 
-"certlogic-js@^1.0.4", "certlogic-js@^1.1.1", "certlogic-js@^1.1.2":
+"certlogic-js@^1.1.1", "certlogic-js@^1.1.2":
   "integrity" "sha512-ufAI05BW5qarzBxyEaPbQ4lyLiAhdXyJ+xryp9hN78kH0nAW0K83ky6uqx/7GQDU84en4nnIhX6WgSTGySBMKw=="
   "resolved" "https://registry.npmjs.org/certlogic-js/-/certlogic-js-1.1.2.tgz"
   "version" "1.1.2"
@@ -3256,14 +3256,14 @@
     "whatwg-mimetype" "^2.3.0"
     "whatwg-url" "^8.0.0"
 
-"dcc-business-rules-utils@^0.2.0":
-  "integrity" "sha512-pX4X3rLDO6xhD+ss4804VIPiwRiiE0hQ5vN3B52e6GX123CFYPHkEctApawDqn9QRKSo9K9D88a916kyCm0Lng=="
-  "resolved" "https://registry.npmjs.org/dcc-business-rules-utils/-/dcc-business-rules-utils-0.2.0.tgz"
-  "version" "0.2.0"
+"dcc-business-rules-utils@^0.4.0":
+  "integrity" "sha512-ncNXzL16FSV3HdNtCEhre5TuKlRDYdmV9oztKy0wbUH0TYgc4WOBvpPKKL5FygMeGLoxb5hMY4BBUXVYKMVT2g=="
+  "resolved" "https://registry.npmjs.org/dcc-business-rules-utils/-/dcc-business-rules-utils-0.4.0.tgz"
+  "version" "0.4.0"
   dependencies:
-    "ajv" "^8.8.2"
+    "ajv" "^8.10.0"
     "ajv-formats" "^2.1.1"
-    "certlogic-js" "^1.0.4"
+    "certlogic-js" "^1.1.2"
     "semver" "^7.3.5"
 
 "debug@^2.6.0":

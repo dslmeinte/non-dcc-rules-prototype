@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://id.uvci.eu/BE/result.schema.json",
+  "title": "Result spec. for BE border checks",
+  "type": "object",
+  "properties": {
+    "category": {
+      "type": "string",
+      "enum": [
+        "entry granted without conditions",
+        "conditions Red Zone",
+        "conditions VOC",
+        "entry from Third Country - entry under conditions",
+        "entry from Third Country - quarantine",
+        "entry from Third Country - manual assessment"
+      ]
+    },
+    "entry permitted": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "category",
+    "result"
+  ]
+}

@@ -57,7 +57,12 @@ const migrateRuleGroup = (country: string, type: RuleType, allOldRules: Rule[]):
         referenceDataSlots: [
             {
                 path: "external.valueSets",
-                value: "--insert after the fact--"
+                versions: [
+                    {
+                        validFrom: "2021-05-01",
+                        value: "--insert after the fact--"
+                    }
+                ]
             }
         ]
     }

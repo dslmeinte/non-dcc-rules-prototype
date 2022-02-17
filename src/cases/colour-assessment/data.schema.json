@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://id.uvci.eu/colour-assessment.schema.json",
+  "title": "Input Data for risk colour assessment",
+  "type": "object",
+  "properties": {
+      "countryOfInterest": {
+        "type": "string",
+        "pattern": "^[A-Z]{2}$"
+      }
+  },
+  "additionalProperties": false,
+  "required": [
+    "countryOfInterest"
+  ]
+}

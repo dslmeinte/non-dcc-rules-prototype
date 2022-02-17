@@ -1,4 +1,5 @@
 import {ReferenceDataSlot} from "./types"
+import {isValidWithin} from "./validity"
 
 
 const setValueAtPathInData = (value: any, path: string, data: any): void => {
@@ -13,9 +14,12 @@ const setValueAtPathInData = (value: any, path: string, data: any): void => {
 }
 
 
-export const insertReferenceData = (data: any, referenceDataSlots: ReferenceDataSlot[]) => {
-    referenceDataSlots.forEach(({ path, value }) => {
-        setValueAtPathInData(value, path, data)
+export const insertReferenceData = (data: any, referenceDataSlots: ReferenceDataSlot[], date: Date) => {
+    referenceDataSlots.forEach(({ path, versions }) => {
+        const version = versions.find(isValidWithin(date))
+        if (version !== undefined) {
+            setValueAtPathInData(version.value, path, data)
+        }   // else: don't add reference data in slot
     })
     return data
 }

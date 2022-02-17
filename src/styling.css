@@ -72,6 +72,13 @@ th {
     color: red;
 }
 
+.timestamp-input {
+    font-size: 12pt;
+    margin-left: 1em;
+    padding-left: 0.25em;
+    width: 13em;
+}
+
 
 /*for the fancy slider:*/
 

@@ -78,7 +78,7 @@ export const evaluateRules = (rules: Rules, now: Date, data: any): Evaluation =>
         }
      */
 
-    insertReferenceData(data, rules.referenceDataSlots)
+    insertReferenceData(data, rules.referenceDataSlots, now)
     const resultsMap = evaluation
         .reduce((resultsMap: ResultsMap, { rule, indexOfApplicableVersion }) =>
                 ({

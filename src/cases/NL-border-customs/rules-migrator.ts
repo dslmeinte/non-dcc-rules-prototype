@@ -83,7 +83,12 @@ const convertedRules: Rules = {
     referenceDataSlots: [
         {
             path: refDataSlotPath,
-            value: [ "AT", "BE", "BG", "CY", "CZ", "DE", "DK", "EE", "ES", "FI", "FR", "GR", "HU", "HR", "IE", "IT", "LT", "LU", "LV", "MT", "NL", "PL", "PT", "RO", "SE", "SI", "SK" ]
+            versions: [
+                {
+                    validFrom: "2021-01-01",
+                    value: [ "AT", "BE", "BG", "CY", "CZ", "DE", "DK", "EE", "ES", "FI", "FR", "GR", "HU", "HR", "IE", "IT", "LT", "LU", "LV", "MT", "NL", "PL", "PT", "RO", "SE", "SI", "SK" ]
+                }
+            ]
         }
     ]
 }

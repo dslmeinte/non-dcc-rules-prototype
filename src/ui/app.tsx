@@ -1,11 +1,11 @@
 import React, {useState} from "react"
 import ReactJson from "react-json-view"
 
-import {pretty, tryParse} from "../utils/json"
 import {evaluateRules, Evaluation, RuleEvaluation} from "../engine/evaluator"
 import {insertReferenceData} from "../engine/reference-data"
 import {asResultsMap, renderAsCompactText} from "../engine/resultOf-utils"
-import {createSchemaValidator} from "../utils/schema-validator"
+import {Rules} from "../engine/types"
+import {createSchemaValidator, pretty, tryParse} from "../utils/json"
 import useCases from "../cases/use-cases"
 
 
@@ -26,6 +26,7 @@ const ResultsTable = ({ evaluation }: { evaluation: Evaluation & object }) =>
         <thead>
             <tr>
                 <th style={{ width: "10em" }}>rule ID</th>
+                {/*<th style={{ width: "2em" }}>index</th>*/}
                 <th>result</th>
                 <th>dependencies</th>
             </tr>
@@ -34,6 +35,7 @@ const ResultsTable = ({ evaluation }: { evaluation: Evaluation & object }) =>
         {evaluation.map((ruleEval, index) =>
             <tr key={index}>
                 <td className="ID"><span title={explanationFor(ruleEval)}>{ruleEval.rule.id}</span></td>
+                {/*<td>{ruleEval.indexOfApplicableVersion}</td>*/}
                 <td className="tt">{`${ruleEval.result}`}</td>
                 <td style={{ fontSize: "9pt" }}>{ruleEval.dependencies.map((depRuleId, index) =>
                     <span className="ID" key={index}>{depRuleId}&nbsp; </span>
@@ -44,14 +46,35 @@ const ResultsTable = ({ evaluation }: { evaluation: Evaluation & object }) =>
     </table>
 
 
+const tryParseAsDate = (dateStr: string, defaultDateStr: string): Date => {
+    try {
+        const date = new Date(dateStr)
+        return date
+    } catch (e) {
+        return new Date(defaultDateStr)
+    }
+}
+
+const evaluateRulesSafely = (rules: Rules, verificationTimestamp: Date, data: any): Evaluation => {
+    try {
+        return evaluateRules(rules, verificationTimestamp, data)
+    } catch (e) {
+        console.dir(e)
+        return false
+    }
+}
+
 export const App = () => {
     const params = new URLSearchParams(location.search)
     const useCaseIndex = params.get("useCase") ? parseInt(params.get("useCase")!, 10): 0
     const useCase = useCases[useCaseIndex]
     const { rules } = useCase
 
-    const now = new Date()
-    const exampleData = useCase.exampleDataOn(now)
+    const nowStr = new Date().toISOString()
+    const [verificationTimestampAsText, setVerificationTimestampAsText] = useState(nowStr)
+    const verificationTimestamp = tryParseAsDate(verificationTimestampAsText, nowStr)
+
+    const exampleData = useCase.exampleDataOn(verificationTimestamp)
     const [dataAsText, setDataAsText] = useState(pretty(exampleData))
 
     const dataValidator = createSchemaValidator(useCase.inputDataSchema)
@@ -61,11 +84,11 @@ export const App = () => {
     const validationErrorMessages = dataIsValid
         ? dataValidator(data).filter((error) => error.message !== undefined).map((error) => `/${error.instancePath} ${error.message!}.`)
         : []
-    const evaluation = dataIsValid && evaluateRules(rules, now, data)
+    const evaluation = dataIsValid && evaluateRulesSafely(rules, verificationTimestamp, data)
     const rulesAreEvaluatable = evaluation !== false
 
     const hasReferenceData = rules.referenceDataSlots.length > 0
-    const referenceData = insertReferenceData({}, rules.referenceDataSlots)
+    const referenceData = insertReferenceData({}, rules.referenceDataSlots, verificationTimestamp)
 
     const [plainJson, setPlainJson] = useState(false)
 
@@ -93,8 +116,8 @@ export const App = () => {
                 </p>
                 <div className="switch-container">
                     <span>JSON style: <em>fancy</em></span>
-                    <label className="switch" htmlFor="checkbox">
-                        <input type="checkbox" id="checkbox" onChange={(event) => { setPlainJson(event.target.checked) }} />
+                    <label className="switch" htmlFor="jsonStyleSelection">
+                        <input type="checkbox" id="jsonStyleSelection" onChange={(event) => { setPlainJson(event.target.checked) }} />
                         <div className="slider round"></div>
                     </label>
                     <span><em>plain</em></span>
@@ -152,7 +175,12 @@ export const App = () => {
                 <p>
                     You can edit the Input Data freely: it will be validated and immediately, and the Result of the evaluation will be updated automatically as well.
                 </p>
+                <label>
+                    Verification timestamp:
+                    <input className="timestamp-input" value={verificationTimestampAsText} onChange={(event) => { setVerificationTimestampAsText(event.target.value) }} />
+                </label>
                 <p>
+                    &#x2757; The Input Data isn't automatically updated with this verification timestamp.
                 </p>
             </div>
             <div>
@@ -171,11 +199,48 @@ export const App = () => {
             </div>
 
             <div>
+                <span className="label">Result</span>
+                {!dataIsValid && <p>(Did not run evaluation because the Input Data didn't validate.)</p>}
+                {!rulesAreEvaluatable && <p>(Did not run evaluation because the Business Rules have a cyclic dependency, or evaluation had a runtime problem.)</p>}
+                {dataIsValid && rulesAreEvaluatable && <div>
+                    <p>
+                        The result of the evaluation of the Business Rules against the Input Data above is as follows in tabular form:
+                    </p>
+                    <ResultsTable evaluation={evaluation} />
+                    <p>
+                        Hover over a rule ID in the first column to see a compact, textual rendering of the CertLogic expression of the applicable version for the rule with that rule ID.
+                        The syntax “<span className="tt">@("<em>&lt;rule ID&gt;</em>")</span>” means “result of rule with ID <em>&lt;rule ID&gt;</em>”.
+                    </p>
+                </div>}
+            </div>
+            {(dataIsValid && rulesAreEvaluatable)
+                ? <div>
+                    <p>
+                        In JSON format it would be:
+                    </p>
+                    <ReactJson
+                        src={asResultsMap(evaluation)}
+                        name={false}
+                        style={{ fontSize: "12pt" }}
+                    />
+                    <p>
+                        This JSON would then be processed further,
+                        e.g. to show a message for every rule that evaluated to <span className="tt">false</span>,
+                        and to show a ✅/❌ depending on the final result.
+                    </p>
+                    <p>
+                        Note that the result is generated in dependency order.
+                    </p>
+                </div>
+                : <div></div>
+            }
+
+            <div>
                 <span className="label">Reference Data</span>
                 {hasReferenceData
                     ? <div>
                         <p>
-                            The following reference data is added to the Input Data, right before evaluation.
+                            The following reference data was added to the Input Data, right before evaluation.
                         </p>
                         <ReactJson
                             src={referenceData}
@@ -194,46 +259,12 @@ export const App = () => {
                 <p>
                     For many use cases, it's useful to be able to inspect reference data from the business rules' logical expressions.
                     This helps to avoid “hard-coding” values in those expressions.
-                    A set of rules can specify <em>slots</em> of reference data, consisting of a value (JSON), and a path at which that value is inserted into the Input Data.
+                    A set of rules can specify <em>slots</em> of reference data, consisting of a path at which that value is inserted into the Input Data, and a number of <em>versions</em>.
+                    Each version consists of a value (JSON), and a validity range (valid from - valid to / indefinitely).
                 </p>
             </div>
-
-            <div>
-                <span className="label">Result</span>
-                {!dataIsValid && <p>(Did not run evaluation because the Input Data didn't validate.)</p>}
-                {!rulesAreEvaluatable && <p>(Did not run evaluation because the Business Rules have a cyclic dependency.)</p>}
-                {dataIsValid && rulesAreEvaluatable && <div>
-                    <p>
-                        The result of the evaluation of the Business Rules against the Input Data above is as follows in tabular form:
-                    </p>
-                    <ResultsTable evaluation={evaluation} />
-                    <p>
-                        Hover over a rule ID in the first column to see a compact, textual rendering of the CertLogic expression of the applicable version for the rule with that rule ID.
-                        The syntax “<span className="tt">@("<em>&lt;rule ID&gt;</em>")</span>” means “result of rule with ID <em>&lt;rule ID&gt;</em>”.
-                    </p>
-                </div>}
-            </div>
-            {dataIsValid && rulesAreEvaluatable &&
-                <div>
-                    <p>
-                        In JSON format it would be:
-                    </p>
-                    <ReactJson
-                        src={asResultsMap(evaluation)}
-                        name={false}
-                        style={{ fontSize: "12pt" }}
-                    />
-                    <p>
-                        This JSON would then be processed further,
-                        e.g. to show a message for every rule that evaluated to <span className="tt">false</span>,
-                        and to show a ✅/❌ depending on the final result.
-                    </p>
-                    <p>
-                        Note that the result is generated in dependency order.
-                    </p>
-                </div>
-            }
         </div>
+
         <h2 id="architecture">Architecture</h2>
         <p>
             The following figure explains things succinctly.

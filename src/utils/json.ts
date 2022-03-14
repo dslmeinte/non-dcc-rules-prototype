@@ -2,7 +2,7 @@ export const pretty = (data: any): string =>
     JSON.stringify(data, null, 2)
 
 
-export const tryParse = (text: string) => {
+export const tryParse = (text: string): unknown => {
     try {
         return JSON.parse(text)
     } catch (e) {

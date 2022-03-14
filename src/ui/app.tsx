@@ -1,7 +1,11 @@
 import React, {useState} from "react"
 import ReactJson from "react-json-view"
 
-import {evaluateRules, Evaluation, RuleEvaluation} from "../engine/evaluator"
+import {
+    evaluateRules,
+    Evaluation,
+    RuleEvaluation
+} from "../engine/evaluator"
 import {insertReferenceData} from "../engine/reference-data"
 import {asResultsMap, renderAsCompactText} from "../engine/resultOf-utils"
 import {Rules} from "../engine/types"
@@ -48,8 +52,7 @@ const ResultsTable = ({ evaluation }: { evaluation: Evaluation & object }) =>
 
 const tryParseAsDate = (dateStr: string, defaultDateStr: string): Date => {
     try {
-        const date = new Date(dateStr)
-        return date
+        return new Date(dateStr)
     } catch (e) {
         return new Date(defaultDateStr)
     }
@@ -75,8 +78,10 @@ export const App = () => {
     const verificationTimestamp = tryParseAsDate(verificationTimestampAsText, nowStr)
 
     const exampleData = useCase.exampleDataOn(verificationTimestamp)
+    // TODO  replace certain strings by Unknown
     const [dataAsText, setDataAsText] = useState(pretty(exampleData))
 
+    // TODO  validate input data schema first, and provide clear output when it doesn't validate
     const dataValidator = createSchemaValidator(useCase.inputDataSchema)
 
     const data = tryParse(dataAsText)

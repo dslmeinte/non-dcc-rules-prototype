@@ -46,7 +46,7 @@ export type Rule = {
     id: string  // no specific format: could use current format but not necessary
     description?: string // only one, non-i18n description: i18n is a UI concerns which should not be solved by the rule
     validTo?: string // one optional end date for the rule's validity
-    // TODO  remove this validTo: keep validity “local”
+    // TODO  remove this validTo: keep validity “local”, but validate that validity ranges are non-overlapping (and preferably contiguous)
     versions: RuleVersion[]
 }
 

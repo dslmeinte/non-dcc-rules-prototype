@@ -16,6 +16,7 @@ import {
     when_,
     isOfCategory, or_
 } from "./factories"
+import {writeJson} from "../../utils/json"
 
 
 const rules: Rules = {
@@ -195,6 +196,9 @@ const rules: Rules = {
         }
     ]
 }
+
+// also serialise, for diffing:
+writeJson("src/cases/BE-rules/rules.json", rules)
 
 export default rules
 

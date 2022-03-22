@@ -29,8 +29,7 @@ export const or_ = (...operands: CertLogicExpression[]): CertLogicExpression => 
     }
 }
 
-// TODO  move to certlogic-js[/-utils]
-
+// TODO  move to certlogic-js-utils
 
 
 export const exprForDccType = (dccType: string): WhenCase =>

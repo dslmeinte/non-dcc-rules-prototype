@@ -1,0 +1,642 @@
+{
+  "id": "BE rules",
+  "rules": [
+    {
+      "id": "age < 12y",
+      "versions": [
+        {
+          "validFrom": "2021-07-13",
+          "logic": {
+            "after": [
+              {
+                "plusTime": [
+                  {
+                    "var": "payload.dob"
+                  },
+                  12,
+                  "year"
+                ]
+              },
+              {
+                "plusTime": [
+                  {
+                    "var": "external.validationClock"
+                  },
+                  0,
+                  "day"
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "v-DCC valid",
+      "versions": [
+        {
+          "validFrom": "2021-07-13",
+          "logic": {
+            "if": [
+              {
+                "var": "payload.v.0"
+              },
+              {
+                "and": [
+                  {
+                    "in": [
+                      {
+                        "var": "payload.v.0.mp"
+                      },
+                      {
+                        "var": "refData.approved-vaccines"
+                      }
+                    ]
+                  },
+                  {
+                    ">=": [
+                      {
+                        "var": "payload.v.0.dn"
+                      },
+                      {
+                        "var": "payload.v.0.sd"
+                      }
+                    ]
+                  },
+                  {
+                    "before": [
+                      {
+                        "plusTime": [
+                          {
+                            "var": "payload.v.0.dt"
+                          },
+                          14,
+                          "day"
+                        ]
+                      },
+                      {
+                        "plusTime": [
+                          {
+                            "var": "external.validationClock"
+                          },
+                          0,
+                          "day"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              false
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "t-DCC valid",
+      "versions": [
+        {
+          "validFrom": "2021-07-13",
+          "logic": {
+            "if": [
+              {
+                "var": "payload.t.0"
+              },
+              {
+                "and": [
+                  {
+                    "===": [
+                      {
+                        "var": "payload.t.0.tr"
+                      },
+                      "260415000"
+                    ]
+                  },
+                  {
+                    "===": [
+                      {
+                        "var": "payload.t.0.tt"
+                      },
+                      "LP6464-4"
+                    ]
+                  },
+                  {
+                    "not-before": [
+                      {
+                        "plusTime": [
+                          {
+                            "var": "payload.t.0.sc"
+                          },
+                          72,
+                          "hour"
+                        ]
+                      },
+                      {
+                        "plusTime": [
+                          {
+                            "var": "external.validationClock"
+                          },
+                          0,
+                          "hour"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              false
+            ]
+          }
+        }
+      ],
+      "description": "DCC is valid PCR-test at most 72h old"
+    },
+    {
+      "id": "r-DCC valid",
+      "versions": [
+        {
+          "validFrom": "2021-07-13",
+          "logic": {
+            "if": [
+              {
+                "var": "payload.r.0"
+              },
+              {
+                "not-after": [
+                  {
+                    "plusTime": [
+                      {
+                        "var": "payload.r.0.fr"
+                      },
+                      11,
+                      "day"
+                    ]
+                  },
+                  {
+                    "plusTime": [
+                      {
+                        "var": "external.validationClock"
+                      },
+                      0,
+                      "day"
+                    ]
+                  },
+                  {
+                    "plusTime": [
+                      {
+                        "var": "payload.r.0.fr"
+                      },
+                      180,
+                      "day"
+                    ]
+                  }
+                ]
+              },
+              false
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "category",
+      "versions": [
+        {
+          "validFrom": "2021-07-13",
+          "logic": {
+            "if": [
+              {
+                "var": "non-DCC-data.citizen of Third Country"
+              },
+              "entry from Third Country - manual assessment",
+              {
+                "if": [
+                  {
+                    "in": [
+                      {
+                        "var": "non-DCC-data.origin of travel"
+                      },
+                      [
+                        "Green Zone",
+                        "Orange Zone"
+                      ]
+                    ]
+                  },
+                  "entry granted without conditions",
+                  {
+                    "if": [
+                      {
+                        "===": [
+                          {
+                            "var": "non-DCC-data.origin of travel"
+                          },
+                          "Red Zone"
+                        ]
+                      },
+                      {
+                        "if": [
+                          {
+                            "var": "payload.v.0"
+                          },
+                          {
+                            "if": [
+                              {
+                                "resultOf": [
+                                  "v-DCC valid"
+                                ]
+                              },
+                              "entry granted without conditions",
+                              {
+                                "if": [
+                                  {
+                                    "resultOf": [
+                                      "age < 12y"
+                                    ]
+                                  },
+                                  "entry granted without conditions",
+                                  "conditions Red Zone"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "if": [
+                              {
+                                "var": "payload.t.0"
+                              },
+                              {
+                                "if": [
+                                  {
+                                    "resultOf": [
+                                      "t-DCC valid"
+                                    ]
+                                  },
+                                  "entry granted without conditions",
+                                  {
+                                    "if": [
+                                      {
+                                        "resultOf": [
+                                          "age < 12y"
+                                        ]
+                                      },
+                                      "entry granted without conditions",
+                                      "conditions Red Zone"
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "if": [
+                                  {
+                                    "var": "payload.r.0"
+                                  },
+                                  {
+                                    "if": [
+                                      {
+                                        "resultOf": [
+                                          "r-DCC valid"
+                                        ]
+                                      },
+                                      "entry granted without conditions",
+                                      {
+                                        "if": [
+                                          {
+                                            "resultOf": [
+                                              "age < 12y"
+                                            ]
+                                          },
+                                          "entry granted without conditions",
+                                          "conditions Red Zone"
+                                        ]
+                                      }
+                                    ]
+                                  },
+                                  false
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "if": [
+                          {
+                            "===": [
+                              {
+                                "var": "non-DCC-data.origin of travel"
+                              },
+                              "VOC Zone"
+                            ]
+                          },
+                          "conditions VOC",
+                          {
+                            "if": [
+                              {
+                                "===": [
+                                  {
+                                    "var": "non-DCC-data.origin of travel"
+                                  },
+                                  "Third Country"
+                                ]
+                              },
+                              {
+                                "if": [
+                                  {
+                                    "resultOf": [
+                                      "v-DCC valid"
+                                    ]
+                                  },
+                                  "entry from Third Country - entry under conditions",
+                                  "entry from Third Country - quarantine"
+                                ]
+                              },
+                              false
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "description": "Determines the first-phase result (the second decision table block) based on origin and certificates presented."
+    },
+    {
+      "id": "entry permitted",
+      "versions": [
+        {
+          "validFrom": "2021-07-13",
+          "logic": {
+            "if": [
+              {
+                "===": [
+                  {
+                    "resultOf": [
+                      "category"
+                    ]
+                  },
+                  "entry granted without conditions"
+                ]
+              },
+              true,
+              {
+                "if": [
+                  {
+                    "===": [
+                      {
+                        "resultOf": [
+                          "category"
+                        ]
+                      },
+                      "conditions Red Zone"
+                    ]
+                  },
+                  {
+                    "if": [
+                      {
+                        "resultOf": [
+                          "t-DCC valid"
+                        ]
+                      },
+                      true,
+                      {
+                        "resultOf": [
+                          "age < 12y"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "if": [
+                      {
+                        "===": [
+                          {
+                            "resultOf": [
+                              "category"
+                            ]
+                          },
+                          "conditions VOC"
+                        ]
+                      },
+                      {
+                        "if": [
+                          {
+                            "var": "non-DCC-data.Belgian resident"
+                          },
+                          true,
+                          {
+                            "var": "non.DCC-data.travel is essential"
+                          }
+                        ]
+                      },
+                      {
+                        "if": [
+                          {
+                            "===": [
+                              {
+                                "resultOf": [
+                                  "category"
+                                ]
+                              },
+                              "entry from Third Country - entry under conditions"
+                            ]
+                          },
+                          true,
+                          {
+                            "if": [
+                              {
+                                "===": [
+                                  {
+                                    "resultOf": [
+                                      "category"
+                                    ]
+                                  },
+                                  "entry from Third Country - quarantine"
+                                ]
+                              },
+                              true,
+                              {
+                                "if": [
+                                  {
+                                    "===": [
+                                      {
+                                        "resultOf": [
+                                          "category"
+                                        ]
+                                      },
+                                      "entry from Third Country - manual assessment"
+                                    ]
+                                  },
+                                  {
+                                    "if": [
+                                      {
+                                        "var": "non-DCC-data.travel is essential"
+                                      },
+                                      true,
+                                      false
+                                    ]
+                                  },
+                                  false
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "quarantine",
+      "versions": [
+        {
+          "validFrom": "2021-07-13",
+          "logic": {
+            "if": [
+              {
+                "===": [
+                  {
+                    "resultOf": [
+                      "category"
+                    ]
+                  },
+                  "entry granted without conditions"
+                ]
+              },
+              false,
+              {
+                "if": [
+                  {
+                    "===": [
+                      {
+                        "resultOf": [
+                          "category"
+                        ]
+                      },
+                      "conditions Red Zone"
+                    ]
+                  },
+                  {
+                    "!": [
+                      {
+                        "if": [
+                          {
+                            "resultOf": [
+                              "t-DCC valid"
+                            ]
+                          },
+                          true,
+                          {
+                            "resultOf": [
+                              "age < 12y"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "if": [
+                      {
+                        "===": [
+                          {
+                            "resultOf": [
+                              "category"
+                            ]
+                          },
+                          "conditions VOC"
+                        ]
+                      },
+                      {
+                        "!": [
+                          {
+                            "var": "non-DCC-data.travel is essential"
+                          }
+                        ]
+                      },
+                      {
+                        "if": [
+                          {
+                            "===": [
+                              {
+                                "resultOf": [
+                                  "category"
+                                ]
+                              },
+                              "entry from Third Country - entry under conditions"
+                            ]
+                          },
+                          true,
+                          {
+                            "if": [
+                              {
+                                "===": [
+                                  {
+                                    "resultOf": [
+                                      "category"
+                                    ]
+                                  },
+                                  "entry from Third Country - quarantine"
+                                ]
+                              },
+                              true,
+                              {
+                                "if": [
+                                  {
+                                    "===": [
+                                      {
+                                        "resultOf": [
+                                          "category"
+                                        ]
+                                      },
+                                      "entry from Third Country - manual assessment"
+                                    ]
+                                  },
+                                  true,
+                                  true
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "referenceDataSlots": [
+    {
+      "path": "refData.approved-vaccines",
+      "versions": [
+        {
+          "validFrom": "2021-07-13",
+          "value": [
+            "EU/1/20/1507",
+            "EU/1/20/1525",
+            "EU/1/20/1528",
+            "EU/1/21/1529",
+            "EU/1/21/1618",
+            "Covishield"
+          ]
+        }
+      ]
+    }
+  ]
+}

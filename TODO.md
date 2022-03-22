@@ -48,3 +48,16 @@
 		* Elisa Bazzani
 		* Davide Auteri (gezien)
 
+
+## Immediate future work
+
+* Validation (& related):
+  1. Validate all input data JSON Schemas (as JSON Schemas).
+  2. Validate all example input data against their input data schemas.
+  3. Make change w.r.t. every rule version having a complete validity range.
+  4. Validate all rule sets (especially see item 3).
+* Make a “cleaned-up version” of BE rules, in natural language, with tables.
+* Result JSON Schema _could_ be derived if we had a type system for CertLogic.
+* Use partial evaluation to make the process interactive to some degree.
+* Write down how to go about implementing rules with this framework, in general.
+

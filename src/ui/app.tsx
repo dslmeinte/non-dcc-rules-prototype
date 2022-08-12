@@ -275,7 +275,7 @@ export const App = () => {
             The following figure explains things succinctly.
         </p>
         <div>
-            <img src="engine.svg" width={600} alt="engine framework" />
+            <img src="img/engine.svg" width={600} alt="engine framework" />
         </div>
         <h2>Attribution</h2>
         <p>

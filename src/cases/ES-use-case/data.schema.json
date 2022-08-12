@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://id.uvci.eu/ES/data.schema.json",
+  "title": "Input Data spec. for ES use case",
+  "type": "object",
+  "properties": {
+    "payload": {
+      "type": "object"
+    },
+    "external": {
+      "type": "object",
+      "properties": {
+        "validationClock": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "CoDcode": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "validationClock"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

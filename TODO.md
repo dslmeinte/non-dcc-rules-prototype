@@ -20,6 +20,8 @@
 * Validate all schemas as JSON schemas.
 * Validate result against JSON schema.
 * Mention “**JSON** Schema” explicitly in figures? Maybe just “Input Data/Result specification”?
+* Construct rules _“offline”_ so that we can run that separately, and the app doesn't have to rely on access to the file system.
+  Construction of the rules is not interactive anyway.
 
 
 ## Future work
